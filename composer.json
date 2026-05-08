@@ -1,0 +1,7 @@
+{
+    "name": "susie/site-final",
+    "require-dev": {
+        "phpmailer/phpmailer": "^7.0"
+    },
+    "require": {}
+}
