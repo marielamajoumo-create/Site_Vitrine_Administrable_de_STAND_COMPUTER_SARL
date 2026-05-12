@@ -149,7 +149,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.html">Accueil</a>
+        <a href="index.php">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Formations</span>
       </div>
@@ -259,7 +259,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
         <h2>Formation pour votre équipe en entreprise ?</h2>
         <p>Nous proposons des formations sur-mesure directement dans vos locaux.</p>
       </div>
-      <a href="contact.html" class="btn btn-primary">
+      <a href="contact.php" class="btn btn-primary">
         Nous contacter <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
     </div>

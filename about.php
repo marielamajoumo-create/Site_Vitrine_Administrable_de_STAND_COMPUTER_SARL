@@ -160,7 +160,7 @@
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.html">Accueil</a>
+        <a href="index.php">Accueil</a>
         <span class="sep">›</span>
         <span class="current">À propos</span>
       </div>

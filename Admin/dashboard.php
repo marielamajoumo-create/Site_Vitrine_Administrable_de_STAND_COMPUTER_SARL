@@ -17,6 +17,7 @@ $totalServices = $pdo->query("SELECT COUNT(*) FROM services")->fetchColumn();
 $totalFormations = $pdo->query("SELECT COUNT(*) FROM formations")->fetchColumn();
 $totalRealisations = $pdo->query("SELECT COUNT(*) FROM realisations")->fetchColumn();
 $totalImages = $pdo->query("SELECT COUNT(*) FROM realisation_images")->fetchColumn();
+$totalMessages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 
 /* =========================
    DERNIÈRES RÉALISATIONS
@@ -59,6 +60,9 @@ $latestRealisations = $pdo->query("
 
         <a href="statistiques/edit.php">Modifier Statistiques</a>
 
+
+        <a href="formulaire_contact/manage.php">Gérer Messages Formulaires contact </a>
+
         <a href="logout.php">Déconnexion</a>
     </aside>
 
@@ -94,6 +98,10 @@ $latestRealisations = $pdo->query("
             <div class="card">
                 <h3><?php echo $totalImages; ?></h3>
                 <p>Images Portfolio</p>
+            </div>
+            <div class="card">
+                <h3><?php echo $totalMessages; ?></h3>
+                <p>Messages Formulaire Contact</p>
             </div>
 
         </section>
@@ -137,6 +145,7 @@ $latestRealisations = $pdo->query("
             <h2>Actions Rapides</h2>
 
             <div class="grid">
+                <a href="formulaire_contact/manage.php" class="btn">+ Gérer Messages Contact</a>
                 <a href="services/add.php" class="btn">+ Nouveau Service</a>
                 <a href="formations/add.php" class="btn">+ Nouvelle Formation</a>
                 <a href="realisations/add.php" class="btn">+ Nouvelle Réalisation</a>
