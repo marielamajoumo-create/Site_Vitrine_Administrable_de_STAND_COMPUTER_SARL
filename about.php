@@ -180,13 +180,13 @@
           <span class="section-label">Notre Histoire</span>
           <h2>Nés pour servir <span class="accent">l'Afrique numérique</span></h2>
           <p>
-            Fondée en 2017 à Lubumbashi en République Démocratique du Congo, Stand Computer SARL est née d'une vision simple : rendre les technologies de l'information accessibles et performantes pour les entreprises africaines.
+            Fondée en 2017 à Mimboman au Cameroun, Stand Computer SARL est née d'une vision simple : rendre les technologies de l'information accessibles et performantes pour les entreprises africaines.
           </p>
           <p>
-            Aujourd'hui, notre équipe de plus de 20 experts accompagne plus de 150 clients dans leurs défis numériques : maintenance informatique, réseaux, développement logiciel, design et marketing digital.
+            Aujourd'hui, notre équipe de plus de 10 experts accompagne  de nombreux clients dans leurs défis numériques : maintenance informatique, réseaux, développement logiciel, video surveillance, design et marketing digital.
           </p>
           <p>
-            Notre engagement est de fournir des solutions durables, adaptées aux réalités locales, avec un service irréprochable et des tarifs compétitifs.
+            Notre engagement est de fournir des solutions durables, adaptées aux réalités locales, avec des services  de qualité, adaptés à vos besoins specifiques.
           </p>
           <a href="contact.html" class="btn btn-primary">Travailler avec nous <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
         </div>
@@ -292,7 +292,7 @@
           <div class="tl-content">
             <div class="tl-card fade-in">
               <h3>Fondation de Stand Computer</h3>
-              <p>Création de l'entreprise à Lubumbashi avec une équipe de 3 personnes spécialisées en maintenance informatique.</p>
+              <p>Création de l'entreprise à Mimboman avec une équipe de 3 personnes spécialisées en Reseau informatique.</p>
             </div>
           </div>
         </div>
@@ -312,7 +312,7 @@
           <div class="tl-content">
             <div class="tl-card fade-in">
               <h3>Développement Logiciel & Web</h3>
-              <p>Ouverture du pôle développement et livraison des 100 premiers projets logiciels et web.</p>
+              <p>Ouverture du pôle développement et livraison des 15 premiers projets logiciels et web.</p>
             </div>
           </div>
         </div>
@@ -322,7 +322,7 @@
           <div class="tl-content">
             <div class="tl-card fade-in">
               <h3>Leader régional du numérique</h3>
-              <p>Plus de 150 clients, 250 projets réalisés et une équipe de 20 experts à votre service.</p>
+              <p>Plus de 150 clients, 50 projets réalisés et une équipe de 20 experts à votre service.</p>
             </div>
           </div>
         </div>
@@ -335,7 +335,7 @@
     <div class="container cta-inner">
       <div>
         <h2>Prêt à démarrer votre transformation numérique ?</h2>
-        <p>Notre équipe est disponible pour étudier votre projet et vous proposer la meilleure solution.</p>
+        <p>Notre équipe est disponible pour étudier votre besoin et vous proposer la meilleure solution.</p>
       </div>
       <a href="contact.php" class="btn btn-primary">
         Demander un devis <span class="material-icons-round" style="font-size:18px">arrow_forward</span>

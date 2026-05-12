@@ -14,21 +14,17 @@ $images = $pdo->prepare("
 $images->execute([$id]);
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Réalisations – Stand Computer SARL</title>
+  <title>Réalisation: <?php echo htmlspecialchars($data['title']); ?> – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/shared.css" />
   <style>
-    body { padding-top: var(--nav-h); }
+    body { padding-top: var(--nav-h); background: var(--bg-light); }
 
     /* ─── Filters ── */
     .portfolio-section { padding: 80px 0; }
@@ -135,53 +131,205 @@ $images->execute([$id]);
     .testimonial-author strong { display: block; font-size: .88rem; color: var(--text-main); }
     .testimonial-author span { font-size: .78rem; color: var(--text-muted); }
 
+    /* ─── REALISATION DETAILS CORRIGÉ ────────────────────────── */
+    .realisation-detail-section {
+      padding: 40px 0 80px;
+      background: var(--bg-light);
+    }
+    
+    .realisation-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* En-tête de la réalisation */
+    .realisation-header {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .realisation-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .realisation-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    
+    .realisation-description {
+      font-size: 1rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      border-left: 4px solid var(--accent);
+      line-height: 1.7;
+      margin-top: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    /* Galerie d'images - Version corrigée */
+    .gallery-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .gallery-title .material-icons-round {
+      color: var(--accent);
+      font-size: 28px;
+    }
+    
+    .realisation-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+    
+    /* Correction de la classe image-card */
+    .image-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .image-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+    
+    /* Conteneur d'image avec dimensions fixes */
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    
+    .image-card:hover .image-wrapper img {
+      transform: scale(1.08);
+    }
+    
+    /* Overlay au survol */
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .image-card:hover .image-overlay {
+      opacity: 1;
+    }
+    
+    .image-overlay .material-icons-round {
+      color: white;
+      font-size: 48px;
+      background: rgba(255,107,0,0.8);
+      border-radius: 50%;
+      padding: 12px;
+    }
+    
+    /* Légende de l'image */
+    .image-caption {
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    /* Message si aucune image */
+    .no-images {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    
+    .no-images .material-icons-round {
+      font-size: 64px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    
+    .no-images p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+    
+    /* Bouton retour */
+    .back-button {
+      margin-bottom: 30px;
+    }
+    
+    .back-button a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .back-button a:hover {
+      color: var(--accent);
+    }
+    
     @media (max-width: 900px) {
       .projects-grid { grid-template-columns: repeat(2, 1fr); }
       .testimonials-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+      .realisation-gallery { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
     }
+    
     @media (max-width: 600px) {
       .projects-grid { grid-template-columns: 1fr; }
-    }
-
-    /*galerie*/
-    .realisation-container {
-        width: 90%;
-        max-width: 1200px;
-        margin: auto;
-        padding: 20px;
-    }
-    .realisation-title{
-        font-size: 32px;
-        font-weight: bold;
-        color: #E65100;
-        margin-bottom: 10px;
-    }
-    .realisation-description {
-        font-size: 16px;
-        color:#E8F5E9;
-        background-color: #1565C0;
-        margin-bottom: 30px;
-        line-height: 1.6;
-    }
-    .realisation-gallery{
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax (120px,1fr));
-        gap:8px;
-    }
-    .image-card {
-        overflow: hidden;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .image-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        transition: transform 0.3s;
-    }
-    .image-card:hover img {
-        transform: scale (1.1);
+      .realisation-gallery { grid-template-columns: 1fr; }
+      .realisation-title { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -194,55 +342,104 @@ $images->execute([$id]);
       <div class="breadcrumb">
         <a href="index.php">Accueil</a>
         <span class="sep">›</span>
-        <a href="realisations.php">Realisations</a>
+        <a href="realisations.php">Réalisations</a>
         <span class="sep">›</span>
-        <span class="current"> Details des Réalisations</span>
+        <span class="current"><?php echo htmlspecialchars($data['title']); ?></span>
       </div>
-      <h1>Nos <span class="accent">Réalisations</span></h1>
-      <p>Découvrez  des projets menés à bien pour des clients de tous secteurs au cameroun dans le domaine <?php echo htmlspecialchars($data['title']); ?>.</p>
+      <h1><?php echo htmlspecialchars($data['title']); ?></h1>
+      <p>Découvrez en détail ce projet réalisé par notre équipe d'experts.</p>
     </div>
   </section>
-   <div class="realisation-container">
-        <h1 class="realisation-title"><?php echo htmlspecialchars($data['title']); ?></h1>
 
-        <p class="realisation-description"><?php echo htmlspecialchars($data['description']); ?></p>
-        <!-- galerie d'image -->
-        <div class="realisation-gallery"> 
-            <?php foreach($images as $img): ?>
-            <div class="image-card">
-                <img src="admin/uploads/realisations/<?php echo $img['image_path']; ?>" width="300">
-            </div>
-            <?php endforeach; ?>
+  <section class="realisation-detail-section">
+    <div class="realisation-container">
+      
+      <!-- Détails de la réalisation -->
+      <div class="realisation-header">
+        <h1 class="realisation-title"><?php echo htmlspecialchars($data['title']); ?></h1>
+        <div class="realisation-description">
+          <?php echo nl2br(htmlspecialchars($data['description'])); ?>
         </div>
-   </div>
-     <div id="footer-placeholder"></div>
+      </div>
+      
+      <!-- Galerie d'images -->
+      <div class="gallery-title">
+        <span class="material-icons-round">photo_library</span>
+        <span>Galerie du projet</span>
+      </div>
+      
+      <div class="realisation-gallery">
+        <?php 
+        $imageCount = 0;
+        foreach($images as $img): 
+          $imageCount++;
+          $imagePath = "admin/uploads/realisations/" . $img['image_path'];
+        ?>
+        <div class="image-card fade-in">
+          <div class="image-wrapper">
+            <img src="<?php echo $imagePath; ?>" 
+                 alt="Image <?php echo $imageCount; ?> - <?php echo htmlspecialchars($data['title']); ?>"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://placehold.co/400x300/1565C0/white?text=Image+non+disponible'">
+            <div class="image-overlay">
+              <span class="material-icons-round">visibility</span>
+            </div>
+          </div>
+          <div class="image-caption">
+            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">image</span>
+            Vue d'ensemble - <?php echo htmlspecialchars($data['title']); ?>
+          </div>
+        </div>
+        <?php endforeach; ?>
+        
+        <?php if($imageCount == 0): ?>
+        <div class="no-images">
+          <span class="material-icons-round">photo_camera</span>
+          <p>Aucune image disponible pour cette réalisation.</p>
+        </div>
+        <?php endif; ?>
+      </div>
+      
+      <!-- Bouton retour -->
+      <div class="back-button" style="margin-top: 40px; text-align: center;">
+        <a href="realisations.php">
+          <span class="material-icons-round">arrow_back</span>
+          Retour à la liste des réalisations
+        </a>
+      </div>
+      
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
 
   <script src="components.js"></script>
   <script>
-    initComponents('accueil');
-
-    // Animated counters
-    const statsSection = document.getElementById('stats');
-    let countersRan = false;
-    const statsObs = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !countersRan) {
-        countersRan = true;
-        document.querySelectorAll('.stat-number[data-target]').forEach(el => {
-          const target = parseInt(el.dataset.target, 10);
-          const accent = el.querySelector('.accent');
-          let val = 0;
-          const step = target / 60;
-          const timer = setInterval(() => {
-            val = Math.min(val + step, target);
-            el.childNodes[0].textContent = Math.floor(val);
-            if (val >= target) clearInterval(timer);
-          }, 20);
-        });
-      }
-    }, { threshold: 0.5 });
-    statsObs.observe(statsSection);
+    initComponents('realisations');
+    
+    // Animation au scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.fade-in').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
   </script>
 </body>
 </html>
-

@@ -299,7 +299,7 @@ if(isset($_POST['login'])) {
         </form>
 
         <div class="back-link">
-            <a href="site%20final/index.php">
+            <a href="../index.php">
                 <span class="material-icons-round">arrow_back</span>
                 Retour au site
             </a>
