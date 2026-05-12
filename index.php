@@ -19,6 +19,115 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/shared.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style> 
+
+/* ─── Catalogue ── */
+    .catalogue-section { padding: 80px 0; }
+    .catalogue-header { text-align: center; margin-bottom: 48px; }
+    .catalogue-header p { color: var(--text-muted); max-width: 540px; margin: 10px auto 0; line-height: 1.7; }
+    .formations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .formation-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .formation-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .formation-thumb { height: 180px; overflow: hidden; position: relative; }
+    .formation-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .formation-card:hover .formation-thumb img { transform: scale(1.06); }
+    .formation-level {
+      position: absolute;
+      top: 12px; left: 12px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: .68rem;
+      font-weight: 700;
+    }
+    .level-debutant   { background: #E8F5E9; color: #2E7D32; }
+    .level-intermediaire { background: #FFF9C4; color: #F9A825; }
+    .level-avance     { background: #FCE4EC; color: #C62828; }
+    .formation-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .formation-cat { font-size: .72rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .formation-body h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+    .formation-body p { font-size: .83rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; flex: 1; }
+    .formation-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: .78rem;
+      color: var(--text-muted);
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .formation-meta span { display: flex; align-items: center; gap: 4px; }
+    .formation-meta .material-icons-round { font-size: 14px; color: var(--accent); }
+    .formation-price {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .price-amount { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+    .price-amount small { font-size: .75rem; font-weight: 400; color: var(--text-muted); }
+
+    /* ─── Process ── */
+    .process-section { padding: 80px 0; background: var(--bg-light); }
+    .process-header { text-align: center; margin-bottom: 56px; }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px; left: 12.5%; right: 12.5%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+    .process-step { text-align: center; position: relative; }
+    .step-num {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 16px rgba(21,101,192,.3);
+    }
+    .process-step h3 { font-size: .9rem; font-weight: 700; margin-bottom: 6px; }
+    .process-step p { font-size: .82rem; color: var(--text-muted); line-height: 1.5; }
+
+    @media (max-width: 900px) {
+      .intro-stats { grid-template-columns: repeat(2, 1fr); }
+      .formations-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+    }
+    @media (max-width: 600px) {
+      .intro-stats { grid-template-columns: repeat(2, 1fr); }
+      .formations-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+    }
+
+  </style>
 </head>
 <body>
 
