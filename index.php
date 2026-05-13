@@ -204,7 +204,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <div class="stats-left">
           <h2>Pourquoi <span class="accent">nous choisir ?</span></h2>
           <p>Nous combinons expertise, innovation et engagement pour vous offrir des services de qualité supérieure adaptés au marché africain.</p>
-          <a href="about.html" class="btn btn-blue">En savoir plus</a>
+          <a href="about.php" class="btn btn-blue">En savoir plus</a>
         </div>
         <div class="stats-grid">
           <div class="stat-item fade-in">
@@ -343,6 +343,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <script>
     initComponents('accueil');
     initComponents('services');
+    initComponents('contact');
 
     // Animated counters
     const statsSection = document.getElementById('stats');

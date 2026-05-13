@@ -105,7 +105,9 @@ table th, table td {
 .btn-add {
     background: #28a745;
 }
-
+.btn-adda {
+     background: #ffc107;
+}
 .btn-edit {
     background: #007bff;
 }
@@ -113,6 +115,7 @@ table th, table td {
 .btn-delete {
     background: #dc3545;
 }
+
 
 /* FORMS */
 form {

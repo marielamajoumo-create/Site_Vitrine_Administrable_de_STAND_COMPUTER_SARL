@@ -1,9 +1,10 @@
 <?php
 include 'config/db.php';
 
-$contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
+
 $horaires = $pdo->query("SELECT * FROM horaires ")->fetchAll(PDO::FETCH_ASSOC);
 $services = $pdo->query("SELECT * FROM services ")->fetchAll(PDO::FETCH_ASSOC);
+$contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -208,7 +209,7 @@ $services = $pdo->query("SELECT * FROM services ")->fetchAll(PDO::FETCH_ASSOC);
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.html">Accueil</a>
+        <a href="index.php">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Contact</span>
       </div>
@@ -288,21 +289,21 @@ $services = $pdo->query("SELECT * FROM services ")->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-row">
               <div class="form-group">
                 <label for="nom">Nom complet *</label>
-                <input type="text" id="nom" placeholder="Votre nom" required />
+                <input type="text" id="nom" name="nom" placeholder="Votre nom" required />
               </div>
               <div class="form-group">
                 <label for="email">Email *</label>
-                <input type="email" id="email" placeholder="votre@email.com" required />
+                <input type="email" id="email" name="email" placeholder="votre@email.com" required />
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="telephone">Téléphone</label>
-                <input type="tel" id="telephone" placeholder="+237 XXX XXX XXX" />
+                <input type="tel" id="telephone" name="telephone" placeholder="+237 XXX XXX XXX" />
               </div>
               <div class="form-group">
                 <label for="service">Service souhaité</label>
-                <select id="service">
+                <select id="service" name="service">
 
                   <option value="">-- Choisir un service --</option>                   
                   <?php foreach ($services as $service) : ?>
@@ -314,11 +315,11 @@ $services = $pdo->query("SELECT * FROM services ")->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="form-group">
               <label for="sujet">Sujet *</label>
-              <input type="text" id="sujet" placeholder="Objet de votre message" required />
+              <input type="text" id="sujet" name="sujet" placeholder="Objet de votre message" required />
             </div>
             <div class="form-group">
               <label for="message">Message *</label>
-              <textarea id="message" placeholder="Décrivez votre projet ou votre besoin..." required></textarea>
+              <textarea id="message" name="message" placeholder="Décrivez votre projet ou votre besoin..." required></textarea>
             </div>
             <div class="form-submit">
               <span class="form-note">* Champs obligatoires</span>
@@ -393,38 +394,35 @@ $services = $pdo->query("SELECT * FROM services ")->fetchAll(PDO::FETCH_ASSOC);
   <div id="fab-placeholder"></div>
   <script src="components.js"></script>
   <script>
-    initComponents('contact');
+    initComponents ('contact');
+       document.getElementById('contactForm').addEventListener('submit', (e) => {
+  e.preventDefault();
 
-    // Form submit
-    document.getElementById('contactForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const nom = document.getElementById('nom').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!nom || !email || !message) {
-        alert('Veuillez remplir tous les champs obligatoires.');
-        return;
-        }  
-        // Envoi vers PHP
-          fetch('sendMail.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `nom=${encodeURIComponent(nom)}&email=${encodeURIComponent(email)}&message=${encodeURIComponent(message)}`
-          })
-          .then(response => response.text())
-          .then(data => {
-            const success = document.getElementById('formSuccess');
-            success.style.display = 'flex';
-            success.textContent = data; // message renvoyé par PHP
-            this.reset();
-            setTimeout(() => { success.style.display = 'none'; }, 6000);
-          })
-          .catch(error => {
-            alert('Erreur lors de l’envoi : ' + error);
-          });
-      });
+  const form = e.target; // on récupère directement le formulaire
+  const nom = form.nom.value.trim();
+  const email = form.email.value.trim();
+  const telephone = form.telephone.value.trim();
+  const service = form.service.value.trim();
+  const sujet = form.sujet.value.trim();
+  const message = form.message.value.trim();
 
-
-  </script>
+  fetch('sendMessage.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `nom=${encodeURIComponent(nom)}&email=${encodeURIComponent(email)}&telephone=${encodeURIComponent(telephone)}&service=${encodeURIComponent(service)}&sujet=${encodeURIComponent(sujet)}&message=${encodeURIComponent(message)}`
+  })
+  .then(response => response.json())
+  .then(data => {
+    const success = document.getElementById('formSuccess');
+    success.style.display = 'flex';
+    success.textContent = data.message;
+    form.reset(); // reset propre du formulaire
+    setTimeout(() => { success.style.display = 'none'; }, 6000);
+  })
+  .catch(error => {
+    alert('Erreur lors de l’envoi : ' + error);
+  });
+});
+</script>
 </body>
 </html>

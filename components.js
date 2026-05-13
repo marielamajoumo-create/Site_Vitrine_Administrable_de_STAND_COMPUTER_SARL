@@ -74,6 +74,26 @@ const NAV_LINKS = [
     </div>
     </nav>`;
 }
+async function loadFooterContact() {
+  try {
+    const contact = getContacts();
+
+    // Injection dynamique
+    document.querySelector('.footer-contact-item.phone a').textContent = contact.phone;
+    document.querySelector('.footer-contact-item.phone a').href = "tel:" + contact.phone;
+
+    document.querySelector('.footer-contact-item.email a').textContent = contact.email;
+    document.querySelector('.footer-contact-item.email a').href = "mailto:" + contact.email;
+
+     const fullAddress= `${contact.adresse},${contact.villeQuartier},${contact.pays}`;
+    document.querySelector('.footer-contact-item.address span').textContent = fullAddress;
+  } catch (err) {
+    console.error("Erreur chargement contact footer:", err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadFooterContact);
+
 async function loadFooterServices() {
 
   try {
@@ -134,15 +154,15 @@ function buildFooter() {
             <h4>Contact</h4>
             <div class="footer-contact-item">
               <span class="material-icons-round">phone</span>
-              <a href="tel:+243979714281">+243 97 971 42 81</a>
+              <a href="#">...</a>
             </div>
             <div class="footer-contact-item">
               <span class="material-icons-round">email</span>
-              <a href="mailto:contact@standcomputer.com">contact@standcomputer.com</a>
+              <a href="#">...</a>
             </div>
             <div class="footer-contact-item">
               <span class="material-icons-round">location_on</span>
-              <span>123, Avenue de la Technologie, Lubumbashi, RDC</span>
+              <span>...</span>
             </div>
             <a href="contact.php" class="btn btn-blue" style="margin-top:12px;padding:8px 18px;font-size:.8rem;">
               Nous écrire
@@ -196,6 +216,7 @@ async function initComponents(activeId) {
   const footerPlaceholder = document.getElementById('footer-placeholder');
   if (footerPlaceholder) footerPlaceholder.innerHTML = buildFooter();
   loadFooterServices();
+   loadFooterContact() ;
 
   // Inject FABs
   const fabPlaceholder = document.getElementById('fab-placeholder');
