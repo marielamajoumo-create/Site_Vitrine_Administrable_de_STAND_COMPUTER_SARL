@@ -234,6 +234,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <script>
     initComponents('accueil');
     initComponents('services');
+    initComponents('contact');
 
     // Animated counters
     const statsSection = document.getElementById('stats');
