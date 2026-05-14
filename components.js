@@ -77,8 +77,8 @@ const NAV_LINKS = [
 }
 async function loadFooterContact() {
   try {
-    const contact = await getContacts ();
-    console.log (contact);
+    const contact = getContacts();
+    
 
     // Injection dynamique
     document.querySelector('.footer-contact-item.phone a').textContent = contact.phone;
@@ -218,7 +218,7 @@ async function initComponents(activeId) {
   const footerPlaceholder = document.getElementById('footer-placeholder');
   if (footerPlaceholder) footerPlaceholder.innerHTML = buildFooter();
   loadFooterServices();
-  loadFooterContact ();
+   loadFooterContact() ;
 
   // Inject FABs
   const fabPlaceholder = document.getElementById('fab-placeholder');
