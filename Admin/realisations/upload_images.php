@@ -55,4 +55,14 @@ $gallery = $images->fetchAll(PDO::FETCH_ASSOC);
             Supprimer
         </a>
     </div>
+
+    <br/>
+
 <?php endforeach; ?>
+<br/>
+<br/>
+<br/>
+<br/>
+<a href="../dashboard.php" class="back">
+                Retour au tableau de bord 
+            </a>

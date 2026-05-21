@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin'])) {
 $formations = $pdo->query("SELECT * FROM formations")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Gestion des Formations</h1>
 
@@ -59,4 +59,12 @@ $formations = $pdo->query("SELECT * FROM formations")->fetchAll(PDO::FETCH_ASSOC
     </tr>
     <?php endforeach; ?>
 </table>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<a href="/StandComputer/tableau-de-bord" class="back">
+                Retour au tableau de bord 
+            </a>
 

@@ -1,3 +1,47 @@
+<?php
+require_once 'config/db.php';
+
+// Article en vedette
+$featured = $pdo->query("
+  SELECT a.*, c.nom AS categorie
+  FROM articles a
+  LEFT JOIN categories c ON a.categorie_id = c.id
+  WHERE a.featured = 1
+  ORDER BY a.date_pub DESC
+  LIMIT 1
+")->fetch();
+
+// Articles récents
+$articles = $pdo->query("
+  SELECT a.*, c.nom AS categorie
+  FROM articles a
+  LEFT JOIN categories c ON a.categorie_id = c.id
+  WHERE a.featured = 0
+  ORDER BY a.date_pub DESC
+")->fetchAll();
+
+// Catégories sidebar
+$categories = $pdo->query("
+  SELECT c.*, COUNT(a.id) AS total
+  FROM categories c
+  LEFT JOIN articles a ON a.categorie_id = c.id
+  GROUP BY c.id
+")->fetchAll();
+
+// Articles récents sidebar
+$recent = $pdo->query("
+  SELECT id, titre, image, date_pub
+  FROM articles
+  ORDER BY date_pub DESC
+  LIMIT 3
+")->fetchAll();
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -203,87 +247,62 @@
     <div class="container">
       <div class="blog-layout">
 
-        <!-- Articles -->
+        <!-- Article à la une -->
+         
         <div>
-          <!-- Article à la une -->
-          <div class="featured-article fade-in">
-            <div class="featured-thumb">
-              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80" alt="Tech article" />
-            </div>
-            <div class="featured-body">
-              <div class="article-meta">
-                <span class="cat-badge">Réseaux</span>
-                <span><span class="material-icons-round" style="font-size:14px">calendar_today</span> 15 Avril 2024</span>
-                <span><span class="material-icons-round" style="font-size:14px">person</span> Jean-Pierre Mutombo</span>
-              </div>
-              <h2>Pourquoi la cybersécurité est-elle devenue incontournable pour les PME africaines ?</h2>
-              <p>Face à la digitalisation croissante des entreprises en Afrique, les menaces informatiques se multiplient. Découvrez comment protéger efficacement votre infrastructure contre les cyberattaques les plus fréquentes.</p>
-              <a href="#" class="read-more">Lire l'article <span class="material-icons-round" style="font-size:16px">arrow_forward</span></a>
-            </div>
-          </div>
+          <?php if($featured): ?>
+<div class="featured-article fade-in">
+  <div class="featured-thumb">
+    <img src="admin/uploads/articles/<?= htmlspecialchars($featured['image']) ?>" />
+  </div>
 
-          <!-- Grille articles -->
-          <div class="articles-grid">
-            <div class="article-card fade-in">
-              <div class="article-thumb">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Développement" />
-              </div>
-              <div class="article-body">
-                <div class="article-meta">
-                  <span class="cat-badge">Développement</span>
-                  <span>10 Avril 2024</span>
-                </div>
-                <h3>5 raisons de créer une application mobile pour votre business en 2024</h3>
-                <p>Les applications mobiles ne sont plus réservées aux grandes entreprises. Voici pourquoi une app peut transformer votre activité.</p>
-                <a href="#" class="read-more">Lire la suite <span class="material-icons-round" style="font-size:16px">arrow_forward</span></a>
-              </div>
-            </div>
+  <div class="featured-body">
+    <div class="article-meta">
+      <span class="cat-badge"><?= htmlspecialchars($featured['categorie']) ?></span>
+      <span><span class="material-icons-round" style="font-size:14px">calendar_today</span><?= date('d M Y', strtotime($featured['date_pub'])) ?></span>
+      <span><span class="material-icons-round" style="font-size:14px">person</span><?= htmlspecialchars($featured['auteur']) ?></span>
+    </div>
 
-            <div class="article-card fade-in">
-              <div class="article-thumb">
-                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&q=80" alt="Réseau" />
-              </div>
-              <div class="article-body">
-                <div class="article-meta">
-                  <span class="cat-badge">Réseaux</span>
-                  <span>5 Avril 2024</span>
-                </div>
-                <h3>Comment optimiser la vitesse de votre réseau Wi-Fi en entreprise</h3>
-                <p>Un réseau lent coûte cher en productivité. Découvrez les solutions pratiques pour améliorer votre connectivité.</p>
-                <a href="#" class="read-more">Lire la suite <span class="material-icons-round" style="font-size:16px">arrow_forward</span></a>
-              </div>
-            </div>
+    <h2><?= htmlspecialchars($featured['titre']) ?></h2>
 
-            <div class="article-card fade-in">
-              <div class="article-thumb">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" alt="Marketing" />
-              </div>
-              <div class="article-body">
-                <div class="article-meta">
-                  <span class="cat-badge">Marketing</span>
-                  <span>28 Mars 2024</span>
-                </div>
-                <h3>Facebook Ads en RDC : guide pratique pour toucher vos clients</h3>
-                <p>Les publicités Facebook sont un levier puissant pour les entreprises congolaises. Voici comment bien configurer vos campagnes.</p>
-                <a href="#" class="read-more">Lire la suite <span class="material-icons-round" style="font-size:16px">arrow_forward</span></a>
-              </div>
-            </div>
+    <p><?= substr(strip_tags($featured['contenu']), 0, 200) ?>...</p>
 
-            <div class="article-card fade-in">
-              <div class="article-thumb">
-                <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500&q=80" alt="Design" />
-              </div>
-              <div class="article-body">
-                <div class="article-meta">
-                  <span class="cat-badge">Design</span>
-                  <span>20 Mars 2024</span>
-                </div>
-                <h3>L'importance d'une identité visuelle forte pour votre marque</h3>
-                <p>Un logo professionnel et une charte graphique cohérente peuvent faire toute la différence dans la perception de votre entreprise.</p>
-                <a href="#" class="read-more">Lire la suite <span class="material-icons-round" style="font-size:16px">arrow_forward</span></a>
-              </div>
-            </div>
-          </div>
+    <a href="article.php?id=<?= $featured['id'] ?>" class="read-more">
+      Lire l'article <span class="material-icons-round">arrow_forward</span>
+    </a>
+  </div>
+</div>
+<?php endif; ?>
+
+   <!-- Grille articles -->
+
+<div class="articles-grid">
+<?php foreach($articles as $a): ?>
+  <div class="article-card fade-in">
+    <div class="article-thumb">
+      <img src="admin/uploads/articles/<?= htmlspecialchars($a['image']) ?>" />
+    </div>
+
+    <div class="article-body">
+      <div class="article-meta">
+        <span class="cat-badge"><?= htmlspecialchars($a['categorie']) ?></span>
+        <span><?= date('d M Y', strtotime($a['date_pub'])) ?></span>
+      </div>
+
+      <h3><?= htmlspecialchars($a['titre']) ?></h3>
+
+      <p><?= substr(strip_tags($a['contenu']), 0, 120) ?>...</p>
+
+      <a href="article.php?id=<?= $a['id'] ?>" class="read-more">
+        Lire la suite <span class="material-icons-round">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+<?php endforeach; ?>
+</div>
+          
+
+          
 
           <!-- Pagination -->
           <div class="pagination">
@@ -295,6 +314,7 @@
         </div>
 
         <!-- Sidebar -->
+         
         <aside class="blog-sidebar">
           <div class="sidebar-widget">
             <h3>Rechercher</h3>
@@ -307,38 +327,33 @@
           <div class="sidebar-widget">
             <h3>Catégories</h3>
             <ul class="cat-list">
-              <li><a href="#">Maintenance <span class="count">8</span></a></li>
-              <li><a href="#">Réseaux <span class="count">12</span></a></li>
-              <li><a href="#">Développement <span class="count">15</span></a></li>
-              <li><a href="#">Design <span class="count">7</span></a></li>
-              <li><a href="#">Marketing <span class="count">10</span></a></li>
-              <li><a href="#">Formations <span class="count">5</span></a></li>
-            </ul>
+              <ul class="cat-list">
+<?php foreach($categories as $c): ?>
+  <li>
+    <a href="blog.php?cat=<?= $c['id'] ?>">
+      <?= htmlspecialchars($c['nom']) ?>
+      <span class="count"><?= $c['total'] ?></span>
+    </a>
+  </li>
+<?php endforeach; ?>
+</ul>
+              
           </div>
 
           <div class="sidebar-widget">
             <h3>Articles récents</h3>
-            <div class="recent-post">
-              <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&q=80" alt="" /></div>
-              <div class="recent-info">
-                <h4>Cybersécurité pour les PME africaines</h4>
-                <span>15 Avril 2024</span>
-              </div>
-            </div>
-            <div class="recent-post">
-              <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100&q=80" alt="" /></div>
-              <div class="recent-info">
-                <h4>5 raisons de créer une app mobile</h4>
-                <span>10 Avril 2024</span>
-              </div>
-            </div>
-            <div class="recent-post">
-              <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=100&q=80" alt="" /></div>
-              <div class="recent-info">
-                <h4>Facebook Ads en RDC : guide pratique</h4>
-                <span>28 Mars 2024</span>
-              </div>
-            </div>
+            <?php foreach($recent as $r): ?>
+<div class="recent-post">
+  <div class="recent-thumb">
+    <img src="admin/uploads/articles/<?= htmlspecialchars($r['image']) ?>" />
+  </div>
+  <div class="recent-info">
+    <h4><?= htmlspecialchars($r['titre']) ?></h4>
+    <span><?= date('d M Y', strtotime($r['date_pub'])) ?></span>
+  </div>
+</div>
+<?php endforeach; ?>
+            
           </div>
 
           <div class="sidebar-widget">

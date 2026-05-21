@@ -13,7 +13,7 @@ $realisations = $pdo->query("
 ")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Gestion des Réalisations</h1>
 
@@ -43,6 +43,10 @@ $realisations = $pdo->query("
         <td>
             <a href="edit.php?id=<?php echo $real['id']; ?>" class="btn btn-edit">Modifier</a>
             <a href="upload_images.php?id=<?php echo $real['id']; ?>" class="btn btn-add">Images</a>
+            <!-- Gestion des vidéos -->
+            <a href="upload_videos.php?id=<?php echo $real['id']; ?>" class="btn btn-add">
+                Vidéos
+            </a>
 
             <a href="delete.php?id=<?php echo $real['id']; ?>"
                class="btn btn-delete"
@@ -55,3 +59,11 @@ $realisations = $pdo->query("
     <?php endforeach; ?>
 
 </table>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<a href="../dashboard.php" class="back">
+                Retour au tableau de bord 
+            </a>

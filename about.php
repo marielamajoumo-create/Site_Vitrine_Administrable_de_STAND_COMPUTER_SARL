@@ -188,7 +188,7 @@
           <p>
             Notre engagement est de fournir des solutions durables, adaptées aux réalités locales, avec des services  de qualité, adaptés à vos besoins specifiques.
           </p>
-          <a href="contact.html" class="btn btn-primary">Travailler avec nous <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
+          <a href="contact.php" class="btn btn-primary">Travailler avec nous <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
         </div>
       </div>
     </div>

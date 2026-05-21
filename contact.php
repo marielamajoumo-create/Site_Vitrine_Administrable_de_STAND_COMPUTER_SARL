@@ -272,8 +272,8 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
             <h4>Heures d'ouverture</h4>
               <?php foreach ($horaires as $horaire) : ?>
                 <div class="hours-row"><span> <?php echo $horaire['jour']; ?></span><span class="open"><?php echo $horaire['ouvertureFermeture']; ?></span></div>
-             <?php endforeach ?>
-              <?php foreach ($horaires as $horaire) : ?>
+             
+          
                   <?php if ($horaire['ouvertureFermeture']=== 'ferme') : ?>
                       <div class="hours-row"><span> <?php echo $horaire['jour']; ?></span><span class="closed">Fermé</span></div>
                   <?php endif ?>

@@ -1,0 +1,51 @@
+RewriteEngine On
+RewriteBase /StandComputer/
+
+# priorité 1 : routes admin
+RewriteRule ^connexion/?$ admin/login.php [L]
+
+
+# priorité 2 : éviter conflit avec fichiers existants
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# fallback php
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]
+
+# 3. Mapping des URLs propres vers fichiers PHP
+RewriteRule ^nos-realisations/?$ realisations.php [L]
+RewriteRule ^contact/?$ contact.php [L]
+RewriteRule ^services/?$ services.php [L]
+RewriteRule ^formations/?$ formations.php [L]
+
+RewriteRule ^a-propos/?$ about.php [L]
+RewriteRule ^actualites/?$ blog.php [L]
+
+RewriteRule ^details-des-realisations/?$ realisation_details.php [L]
+RewriteRule ^tableau-de-bord/?$ admin/dashboard.php [L]
+RewriteRule ^deconnexion/?$ admin/logout.php [L]
+RewriteRule ^style-admin/?$ assets/css/admin.css
+
+RewriteRule ^ajouter-un-service/?$ admin/services/add.php [L]
+RewriteRule ^gerer-les-services/?$ admin/services/manage.php [L]
+
+RewriteRule ^ajouter-une-formation/?$ admin/formations/add.php [L]
+RewriteRule ^gerer-les-formations/?$ admin/formations/manage.php [L]
+
+RewriteRule ^ajouter-un-article/?$ admin/blog/add.php [L]
+RewriteRule ^gerer-les-articles/?$ admin/blog/manage.php [L]
+
+RewriteRule ^ajouter-un-contact/?$ admin/contacts/add.php [L]
+RewriteRule ^gerer-les-contacts/?$ admin/contacts/manage.php [L]
+
+RewriteRule ^ajouter-une-horaire/?$ admin/horaires/add.php [L]
+RewriteRule ^gerer-les-horaires/?$ admin/horaires/manage.php [L]
+
+RewriteRule ^gerer-les-formulaires-de-contact/?$ admin/formulaire_contact/manage.php [L]
+
+
+
+# 4. Page d’accueil
+RewriteRule ^$ index.php [L]

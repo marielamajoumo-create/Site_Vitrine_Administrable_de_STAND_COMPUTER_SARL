@@ -7,7 +7,7 @@ $sql = "SELECT id, nom, email, telephone,sujet, date_creation, statut
 $stmt = $pdo->query($sql);
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Messages de contact</h1>
 <table class="table">
@@ -46,3 +46,6 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endforeach; ?>
   </tbody>
 </table>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
+

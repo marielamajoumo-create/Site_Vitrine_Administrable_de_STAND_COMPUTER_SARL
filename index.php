@@ -1,5 +1,7 @@
 <?php
 include 'config/db.php';
+$base = '/StandComputer/';
+
 
 $services = $pdo->query("SELECT * FROM services LIMIT 6")->fetchAll(PDO::FETCH_ASSOC);
 $formations = $pdo->query("SELECT * FROM formations LIMIT 4")->fetchAll(PDO::FETCH_ASSOC);
@@ -12,6 +14,18 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <link rel="manifest" href="/StandComputer/manifest.json">
+
+<link rel="icon" type="image/jpeg" sizes="32x32"
+      href="/StandComputer/assets/icons/icon-192.jpeg">
+
+<link rel="apple-touch-icon"
+      href="/StandComputer/assets/icons/icon-192.jpeg">
+
+
+<meta name="theme-color" content="#0a1628">
+
+<link rel="apple-touch-icon" href="/StandComputer/icons/icon-192.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stand Computer SARL – Votre partenaire en solutions numériques</title>
@@ -147,11 +161,11 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
           marketing digital, formations et bien plus.
         </p>
         <div class="hero-actions">
-          <a href="services.php" class="btn btn-primary">
+          <a href="services" class="btn btn-primary">
             Découvrir nos services
             <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
           </a>
-          <a href="contact.php" class="btn btn-outline">
+          <a href="contact" class="btn btn-outline">
             Nous contacter
             <span class="material-icons-round" style="font-size:18px">open_in_new</span>
           </a>
@@ -182,7 +196,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
       </div>
       <div class="services-grid">
         <?php foreach($services as $service): ?>
-          <a href="services.php#maintenance" class="service-card fade-in">
+          <a href="<?= $base ?>services" class="service-card fade-in">
             <div class="service-icon"><span class="material-icons-round"><?php echo $service['icon']; ?></span></div>
             <h3><?php echo $service['title']; ?></h3>
             <p><?php echo $service['description']; ?></p>
@@ -192,7 +206,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <?php endforeach; ?>
       </div>
       <div class="services-cta">
-        <a href="services.php" class="btn btn-outline-dark">Voir tous nos services</a>
+        <a href="<?= $base ?>services" class="btn btn-outline-dark">Voir tous nos services</a>
       </div>
     </div>
   </section>
@@ -204,7 +218,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <div class="stats-left">
           <h2>Pourquoi <span class="accent">nous choisir ?</span></h2>
           <p>Nous combinons expertise, innovation et engagement pour vous offrir des services de qualité supérieure adaptés au marché africain.</p>
-          <a href="about.php" class="btn btn-blue">En savoir plus</a>
+          <a href="a-propos" class="btn btn-blue">En savoir plus</a>
         </div>
         <div class="stats-grid">
           <div class="stat-item fade-in">
@@ -262,12 +276,15 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
             </div>
             <div class="formation-price">
               <div class="price-amount">Sur devis <small>/personne</small></div>
-              <a href="contact.php" class="btn btn-primary" style="padding:8px 16px;font-size:.8rem;">S'inscrire</a>
+              <a href="<?= $base ?>contact" class="btn btn-primary" style="padding:8px 16px;font-size:.8rem;">S'inscrire</a>
             </div>
           </div>
         </div>
       <?php endforeach?>
     </div>
+    <div class="services-cta">
+        <a href="<?= $base ?>formations" class="btn btn-outline-dark">Voir toutes nos formations</a>
+      </div>
     </div>
      </section>
 
@@ -281,7 +298,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <h2>Souhaitez-vous transformer vos connaissances en competences  concretes et employable ?</h2>
         <p>Notre équipe est engagee à vous accompagner dans ce parcours .</p>
       </div>
-      <a href="contact.html" class="btn btn-primary">
+      <a href="#" class="btn btn-primary">
         Decouvrez le CTIPDC
         <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
@@ -300,7 +317,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <?php foreach($realisations as $realisation): ?>
 
         <div class="project-card fade-in">
-          <div class="project-img"><a href="realisation_details.php?id=<?php echo $realisation['id']; ?>">
+          <div class="project-img"><a href="<?= $base ?>details-des-realisations?id=<?php echo $realisation['id']; ?>">
                 <img src="admin/uploads/realisations/<?php echo $realisation['thumbnail']; ?>" alt="<?php echo htmlspecialchars($realisation['title']); ?>" />
             </a>
           </div>
@@ -314,7 +331,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
       </div>
         
       <div class="realisations-cta">
-        <a href="realisations.php" class="btn btn-blue">Voir toutes nos réalisations</a>
+        <a href="<?= $base ?>nos-realisations" class="btn btn-blue">Voir toutes nos réalisations</a>
       </div>
     </div>
   </section>
@@ -329,7 +346,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <h2>Besoin d'un accompagnement personnalisé ?</h2>
         <p>Notre équipe est à votre écoute pour concrétiser vos projets.</p>
       </div>
-      <a href="contact.php" class="btn btn-primary">
+      <a href="contact" class="btn btn-primary">
         Contactez-nous maintenant
         <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
@@ -342,8 +359,8 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <script src="components.js"></script>
   <script>
     initComponents('accueil');
-    initComponents('services');
-    initComponents('contact');
+    //initComponents('services');
+    //initComponents('contact');
 
     // Animated counters
     const statsSection = document.getElementById('stats');

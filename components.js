@@ -1,4 +1,9 @@
-
+const BASE = "/StandComputer/";
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/StandComputer/service-worker.js")
+    .then(() => console.log("PWA activée"))
+    .catch(err => console.log("Erreur SW:", err));
+}
 async function getServices() {
 
   try {
@@ -27,13 +32,13 @@ async function getContacts() {
 async function buildNavbar(activeId) {
   const services = await getServices();
 const NAV_LINKS = [
-  { label: 'Accueil',      href: 'index.php',        id: 'accueil' },
-  { label: 'À propos',     href: 'about.php',         id: 'about' },
-  { label: 'Services',     href: 'services.php',      id: 'services', dropdown:services},
-  { label: 'Formations',   href: 'formations.php',    id: 'formations' },
-  { label: 'Réalisations', href: 'realisations.php',  id: 'realisations' },
-  { label: 'Blog',         href: 'blog.php',           id: 'blog' },
-  { label: 'Contact',      href: 'contact.php',        id: 'contact' },
+  { label: 'Accueil',      href: './',        id: 'accueil' },
+  { label: 'À propos',     href: 'a-propos',         id: 'about' },
+  { label: 'Services',     href: 'services',      id: 'services', dropdown:services},
+  { label: 'Formations',   href: 'formations',    id: 'formations' },
+  { label: 'Réalisations', href: 'realisations',  id: 'realisations' },
+  { label: 'Blog',         href: 'blog',           id: 'blog' },
+  { label: 'Contact',      href: 'contact',        id: 'contact' },
 ];
 
   const linksHTML = NAV_LINKS.map(link => {
@@ -41,7 +46,7 @@ const NAV_LINKS = [
     if (link.dropdown) {
       //const services=window.servicesData || [];
       const dropItems = link.dropdown.map(s =>
-        `<a href="services.php#${s.slug}">${s.title}</a>`
+        `<a href="services#${s.slug}">${s.title}</a>`
       ).join('');
       return `
         <li class="has-dropdown">
@@ -59,7 +64,7 @@ const NAV_LINKS = [
   return `
     <nav id="navbar">
       <div class="container nav-inner">
-        <a href="index.php" class="nav-logo">
+        <a href="./" class="nav-logo">
           <img src="logo.jpeg" alt="Stand Computer SARL" />
         </a>
         <ul class="nav-links">${linksHTML}</ul>
@@ -131,7 +136,7 @@ async function loadFooterServices() {
       return;
     }
     list.innerHTML = services.map(s =>
-              `<li><a href="services.php#${s.slug}">${s.title}</a></li>`
+              `<li><a href="/StandComputer/services#${s.slug}">${s.title}</a></li>`
     ).join('');
   } catch (err) {
     console.error ("Erreur chargement services footer :" , err)
@@ -157,18 +162,18 @@ function buildFooter() {
               
             </div>
             
-            <a href="admin/login.php" class="adminpath">admin</a>
+            <a href="/StandComputer/connexion" class="adminpath">admin</a>
           </div>
           <div class="footer-col">
             <h4>Liens rapides</h4>
             <ul>
-              <li><a href="index.php">Accueil</a></li>
-              <li><a href="about.php">À propos</a></li>
-              <li><a href="services.php">Services</a></li>
-              <li><a href="realisations.php">Réalisations</a></li>
-              <li><a href="formations.php">Formations</a></li>
-              <li><a href="blog.php">Blog</a></li>
-              <li><a href="contact.php">Contact</a></li>
+              <li><a href="./">Accueil</a></li>
+              <li><a href="a-propos">À propos</a></li>
+              <li><a href="services">Services</a></li>
+              <li><a href="realisations">Réalisations</a></li>
+              <li><a href="formations">Formations</a></li>
+              <li><a href="blog">Blog</a></li>
+              <li><a href="contact">Contact</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -191,7 +196,7 @@ function buildFooter() {
               <span class="material-icons-round">location_on</span>
               <span></span>
             </div>
-            <a href="contact.php" class="btn btn-blue" style="margin-top:12px;padding:8px 18px;font-size:.8rem;">
+            <a href="contact" class="btn btn-blue" style="margin-top:12px;padding:8px 18px;font-size:.8rem;">
               Nous écrire
             </a>
             <div style="margin-top:24px;">

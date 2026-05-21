@@ -10,7 +10,7 @@ session_destroy();
 /* =========================
    REDIRECTION LOGIN
 ========================= */
-header("Location: login.php");
+header("Location: /StandComputer/connexion");
 exit();
 ?>
 

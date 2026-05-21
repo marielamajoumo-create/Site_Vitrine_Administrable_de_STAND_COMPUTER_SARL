@@ -29,7 +29,7 @@ if (isset($_POST['update'])) {
 $stats = $pdo->query("SELECT * FROM statistiques WHERE id=1")->fetch(PDO::FETCH_ASSOC);
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Modifier les Statistiques</h1>
 

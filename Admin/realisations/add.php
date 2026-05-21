@@ -40,6 +40,26 @@ if (isset($_POST['submit'])) {
             $imgStmt -> execute ([$realisationId,$filename]);
         }
     }
+         /* =========================
+       GALERIE DE VIDEOS
+    ========================= */
+    if (!empty($_FILES['videos']['name'][0])) {
+        foreach ($_FILES['videos']['name'] as $key => $name) {
+            if (!empty($name)) {
+
+                $filename = time() . "_video_" . $key . "_" . basename($name);
+
+                move_uploaded_file(
+                    $_FILES['videos']['tmp_name'][$key],
+                    $uploadDir . $filename
+                );
+
+                $videoStmt = $pdo->prepare("INSERT INTO realisation_video(realisation_id, video_path)VALUES (?, ?)");
+                $videoStmt->execute([$realisationId,$filename]);
+            }
+        }
+    }
+
 
     header("Location: manage.php");
     exit();

@@ -45,7 +45,7 @@ if(isset($_POST['login'])) {
 
     if($stmt->rowCount() > 0) {
         $_SESSION['admin'] = $username;
-        header("Location: dashboard.php");
+        header("Location: /StandComputer/tableau-de-bord");
         exit () ;
     } else {
         $error = "Identifiants incorrects";
@@ -299,7 +299,7 @@ if(isset($_POST['login'])) {
         </form>
 
         <div class="back-link">
-            <a href="../index.php">
+            <a href="/StandComputer/">
                 <span class="material-icons-round">arrow_back</span>
                 Retour au site
             </a>

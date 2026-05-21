@@ -295,7 +295,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
             <li class="off"><span class="material-icons-round">close</span> Application mobile</li>
             <li class="off"><span class="material-icons-round">close</span> Marketing digital</li>
           </ul>
-          <a href="contact.html" class="btn btn-outline-dark">Demander un devis</a>
+          <a href="contact.php" class="btn btn-outline-dark">Demander un devis</a>
         </div>
         <div class="pricing-card featured fade-in">
           <div class="pricing-badge">Recommandé</div>
@@ -309,7 +309,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
             <li><span class="material-icons-round">check</span> Identité visuelle complète</li>
             <li><span class="material-icons-round">check</span> Marketing digital (3 mois)</li>
           </ul>
-          <a href="contact.html" class="btn btn-primary">Demander un devis</a>
+          <a href="contact.php" class="btn btn-primary">Demander un devis</a>
         </div>
         <div class="pricing-card fade-in">
           <h3>Entreprise</h3>
@@ -322,7 +322,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
             <li><span class="material-icons-round">check</span> Marketing digital continu</li>
             <li><span class="material-icons-round">check</span> Support prioritaire 24/7</li>
           </ul>
-          <a href="contact.html" class="btn btn-outline-dark">Nous contacter</a>
+          <a href="contact.php" class="btn btn-outline-dark">Nous contacter</a>
         </div>
       </div>
     </div>

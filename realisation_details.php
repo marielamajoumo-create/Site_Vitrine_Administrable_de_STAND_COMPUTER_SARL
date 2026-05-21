@@ -12,6 +12,20 @@ $images = $pdo->prepare("
     WHERE realisation_id=?
 ");
 $images->execute([$id]);
+$videos = $pdo->prepare("
+    SELECT * FROM realisation_videos
+    WHERE realisation_id = ?
+");
+$videos->execute([$id]);
+function createSlug($string)
+{
+    $string = strtolower($string);
+    $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+    $string = preg_replace('/[^a-z0-9]+/', '-', $string);
+    $string = trim($string, '-');
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -399,6 +413,39 @@ $images->execute([$id]);
         </div>
         <?php endif; ?>
       </div>
+      <!-- Galerie de vidéos -->
+      
+<?php
+$videoCount = 0;
+if ($videos->rowCount() > 0):
+?>
+<div class="gallery-title" style="margin-top: 60px;">
+  <span class="material-icons-round">videocam</span>
+  <span>Vidéos du projet</span>
+</div>
+
+<div class="realisation-gallery">
+  <?php foreach ($videos as $video): 
+    $videoCount++;
+    $videoPath = "admin/uploads/realisations/videos/" . $video['video_path'];
+  ?>
+  <div class="image-card fade-in">
+    <div class="image-wrapper" style="height: auto; background: #000;">
+      <video controls preload="metadata" style="width:100%; display:block;">
+        <source src="<?php echo htmlspecialchars($videoPath); ?>" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture de vidéos.
+      </video>
+    </div>
+    <div class="image-caption">
+      <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">
+        movie
+      </span>
+      Vidéo <?php echo $videoCount; ?> - <?php echo htmlspecialchars($data['title']); ?>
+    </div>
+  </div>
+  <?php endforeach; ?>
+</div>
+<?php endif; ?>
       
       <!-- Bouton retour -->
       <div class="back-button" style="margin-top: 40px; text-align: center;">
