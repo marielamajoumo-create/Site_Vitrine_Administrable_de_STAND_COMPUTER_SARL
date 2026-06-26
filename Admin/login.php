@@ -32,24 +32,53 @@ if(isset($_POST['login'])) {
 
 
 <?php */
+
 session_start();
-include '../config/db.php';
- $error='';
+require_once __DIR__ . '/../config/db.php';
 
-if(isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+$error = '';
 
-    $stmt = $pdo->prepare("SELECT * FROM admins WHERE username=? AND passwor=?");
-    $stmt->execute([$username, $password]);
+if (isset($_POST['login'])) {
 
-    if($stmt->rowCount() > 0) {
-        $_SESSION['admin'] = $username;
-        header("Location: /StandComputer/tableau-de-bord");
-        exit () ;
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+
+    // Recherche de l'utilisateur
+    $stmt = $pdo->prepare("SELECT * FROM admins WHERE username = ?");
+    $stmt->execute([$username]);
+
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($admin) {
+
+        if ($admin['actif'] == 0) {
+
+            $error = "Votre compte administrateur est désactivé. Veuillez contacter le Super Administrateur.";
+
+        } elseif ($admin['passwor'] === $password) {
+
+            $_SESSION['admin'] = $admin['username'];
+            $_SESSION['admin_id'] = $admin['id'];
+            $_SESSION['admin_role'] = $admin['role'];
+             // Mise à jour de la dernière connexion
+            $update = $pdo->prepare("UPDATE admins SET last_login = NOW() WHERE id = ?");
+            $update->execute([$admin['id']]);
+
+            header("Location: /StandComputer/tableau-de-bord");
+            exit();
+
+        } else {
+
+            $error = "Mot de passe incorrect.";
+
+        }
+
     } else {
-        $error = "Identifiants incorrects";
+
+        $error = "Nom d'utilisateur introuvable.";
+
     }
+
 }
 ?>
 

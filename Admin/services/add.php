@@ -1,9 +1,9 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
-    header("Location: ../login.php");
+    header("Location: /StandComputer/connexion");
     exit();
 }
 
@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     $description = $_POST['description'];
     $icon= $_POST['icon'];
     $image=$_POST['image'];
-    $uploadDir="../uploads/services/";
+    $uploadDir = __DIR__ . '/../uploads/services/';
     if (!is_dir ($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
@@ -34,13 +34,16 @@ if (isset($_POST['submit'])) {
 
     $stmt->execute([$title, $description, $icon, $category,$image]);
 
-    header("Location: manage.php");
+    header("Location: /StandComputer/gerer-les-services");
 }
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Ajouter un Service</h1>
+<br>
+<br>
+
 
 <form method="POST" enctype="multipart/form-data">
 
@@ -55,3 +58,9 @@ if (isset($_POST['submit'])) {
     <button type="submit" name="submit">Ajouter</button>
 
 </form>
+<br/>
+<br/>
+
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
+

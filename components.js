@@ -1,29 +1,39 @@
 const BASE = "/StandComputer/";
+
+let deferredPrompt = null;
+
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/StandComputer/service-worker.js")
-    .then(() => console.log("PWA activée"))
-    .catch(err => console.log("Erreur SW:", err));
+    navigator.serviceWorker.register("/StandComputer/service-worker")
+        .then(() => console.log("PWA activée"))
+        .catch(err => console.log("Erreur SW :", err));
 }
-async function getServices() {
 
-  try {
-    const response = await fetch('API/get_services.php');
-    return await response.json();
-  } catch (error) {
-    console.error("Erreur lors du chargement des services :", error);
-    return [];
-  }
-}
+
+
+
 async function getContacts() {
-
   try {
-    const response = await fetch ('API/get_contact.php');
+    const response = await fetch(BASE + "API/get_contact.php");
     return await response.json();
   } catch (error) {
     console.error("Erreur lors du chargement des contacts :", error);
     return [];
   }
 }
+async function getServices() {
+  try {
+   const response = await fetch(BASE + "API/get_services.php");
+    const data = await response.json();
+
+    console.log(data); // Debug
+
+    return data;
+  } catch (error) {
+    console.error("Erreur lors du chargement des services :", error);
+    return [];
+  }
+}
+
 
 /* ═══════════════════════════════════════════════════
    STAND COMPUTER SARL — Composants partagés
@@ -32,13 +42,13 @@ async function getContacts() {
 async function buildNavbar(activeId) {
   const services = await getServices();
 const NAV_LINKS = [
-  { label: 'Accueil',      href: './',        id: 'accueil' },
-  { label: 'À propos',     href: 'a-propos',         id: 'about' },
-  { label: 'Services',     href: 'services',      id: 'services', dropdown:services},
-  { label: 'Formations',   href: 'formations',    id: 'formations' },
-  { label: 'Réalisations', href: 'realisations',  id: 'realisations' },
-  { label: 'Blog',         href: 'blog',           id: 'blog' },
-  { label: 'Contact',      href: 'contact',        id: 'contact' },
+  { label: 'Accueil', href: '/StandComputer/', id: 'accueil' },
+{ label: 'À propos', href: '/StandComputer/a-propos', id: 'about' },
+{ label: 'Services', href: '/StandComputer/services', id: 'services', dropdown:services},
+{ label: 'Formations', href: '/StandComputer/formations', id: 'formations' },
+{ label: 'Réalisations', href: '/StandComputer/realisations', id: 'realisations' },
+{ label: 'Blog', href: '/StandComputer/blog', id: 'blog' },
+{ label: 'Contact', href: '/StandComputer/contact', id: 'contact' },
 ];
 
   const linksHTML = NAV_LINKS.map(link => {
@@ -46,8 +56,8 @@ const NAV_LINKS = [
     if (link.dropdown) {
       //const services=window.servicesData || [];
       const dropItems = link.dropdown.map(s =>
-        `<a href="services#${s.slug}">${s.title}</a>`
-      ).join('');
+  `<a href="/StandComputer/services#${s.slug}">${s.title}</a>`
+).join('');
       return `
         <li class="has-dropdown">
           <a href="${link.href}" class="${isActive}">${link.label} ▾</a>
@@ -58,17 +68,19 @@ const NAV_LINKS = [
   }).join('');
 
   const mobileHTML = NAV_LINKS.map(link =>
-    `<a href="${link.href}">${link.label}</a>`
-  ).join('');
+  `<a href="${link.href}">${link.label}</a>
+  `
+).join('');
+
 
   return `
     <nav id="navbar">
       <div class="container nav-inner">
         <a href="./" class="nav-logo">
-          <img src="logo.jpeg" alt="Stand Computer SARL" />
+          <img src="/StandComputer/logo.jpeg" alt="Stand Computer SARL" />
         </a>
         <ul class="nav-links">${linksHTML}</ul>
-        <a href="contact.php" class="btn btn-primary nav-cta">Demander un devis</a>
+        <a href="/StandComputer/contact" class="btn btn-primary nav-cta">Demander un devis</a>
         <div class="hamburger" id="hamburger" aria-label="Menu">
           <span></span><span></span><span></span>
         </div>
@@ -76,9 +88,8 @@ const NAV_LINKS = [
     </nav>
     <div class="mobile-menu" id="mobileMenu">
       ${mobileHTML}
-      <a href="contact.php" class="btn btn-primary">Demander un devis</a>
-    </div>
-    </nav>`;
+      <a href="/StandComputer/contact" class="btn btn-primary">Demander un devis</a>
+    </div>`;
 }
 async function loadFooterContact() {
   try {
@@ -137,6 +148,7 @@ async function loadFooterServices() {
     }
     list.innerHTML = services.map(s =>
               `<li><a href="/StandComputer/services#${s.slug}">${s.title}</a></li>`
+
     ).join('');
   } catch (err) {
     console.error ("Erreur chargement services footer :" , err)
@@ -150,7 +162,7 @@ function buildFooter() {
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <img src="logo.jpeg" alt="Stand Computer SARL" />
+            <img src="/StandComputer/logo.jpeg" alt="Stand Computer SARL" />
             <p>Votre partenaire de confiance pour toutes vos solutions technologiques et digitales.</p>
             <div class="footer-socials">
               <a href="#" class="social-icon" aria-label="Facebook">f</a>
@@ -163,17 +175,20 @@ function buildFooter() {
             </div>
             
             <a href="/StandComputer/connexion" class="adminpath">admin</a>
+            <button id="installBtn" >
+               📲 Installer l'application
+          </button>
           </div>
           <div class="footer-col">
             <h4>Liens rapides</h4>
             <ul>
-              <li><a href="./">Accueil</a></li>
-              <li><a href="a-propos">À propos</a></li>
-              <li><a href="services">Services</a></li>
-              <li><a href="realisations">Réalisations</a></li>
-              <li><a href="formations">Formations</a></li>
-              <li><a href="blog">Blog</a></li>
-              <li><a href="contact">Contact</a></li>
+             <li><a href="/StandComputer/">Accueil</a></li>
+             <li><a href="/StandComputer/a-propos">À propos</a></li>
+              <li><a href="/StandComputer/services">Services</a></li>
+              <li><a href="/StandComputer/realisations">Réalisations</a></li>
+              <li><a href="/StandComputer/formations">Formations</a></li>
+              <li><a href="/StandComputer/blog">Blog</a></li>
+              <li><a href="/StandComputer/contact">Contact</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -196,7 +211,7 @@ function buildFooter() {
               <span class="material-icons-round">location_on</span>
               <span></span>
             </div>
-            <a href="contact" class="btn btn-blue" style="margin-top:12px;padding:8px 18px;font-size:.8rem;">
+            <a href="/StandComputer/contact" class="btn btn-blue" style="margin-top:12px;padding:8px 18px;font-size:.8rem;">
               Nous écrire
             </a>
             <div style="margin-top:24px;">
@@ -207,7 +222,7 @@ function buildFooter() {
                 <button type="button" id="newsletter-btn" aria-label="S'abonner">
                   <span class="material-icons-round" style="font-size:18px">send</span>
                 </button>
-              </div>
+              </div> 
             </div>
           </div>
         </div>
@@ -247,6 +262,18 @@ async function initComponents(activeId) {
   // Inject footer
   const footerPlaceholder = document.getElementById('footer-placeholder');
   if (footerPlaceholder) footerPlaceholder.innerHTML = buildFooter();
+
+  // Gestion du bouton d'installation
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", e => {
+
+    console.log("beforeinstallprompt déclenché");
+
+    e.preventDefault();
+
+    deferredPrompt = e;
+});
   
 
   // Inject FABs
@@ -254,14 +281,25 @@ async function initComponents(activeId) {
   if (fabPlaceholder) fabPlaceholder.innerHTML = buildFABs(); 
   await loadFooterServices();
    await loadFooterContact(); 
+  document.addEventListener("click", async e => {
 
-  // Navbar scroll shadow
-  const navbar = document.getElementById('navbar');
- if (navbar){
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 20);
-  }); }
+    if (e.target.id === "installBtn") {
 
+        if (!deferredPrompt) {
+
+            alert("Le navigateur considère encore que le site n'est pas installable.");
+
+            return;
+        }
+
+        deferredPrompt.prompt();
+
+        const choice = await deferredPrompt.userChoice;
+
+        console.log(choice.outcome);
+    }
+
+});
   // Hamburger menu
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');

@@ -1,5 +1,5 @@
 <?php
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $id = $_GET['id'];
 
@@ -19,14 +19,16 @@ if (isset($_POST['update'])) {
         $id
     ]);
 
-    header("Location: manage.php");
+    header("Location: /StandComputer/gerer-les-horaires");
     exit();
 }
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Modifier Horaire</h1>
+<br>
+<br>
 
 <form method="POST">
 
@@ -36,3 +38,13 @@ if (isset($_POST['update'])) {
     <button type="submit" name="update">Modifier</button>
 
 </form>
+<br>
+<br>
+<a href="/StandComputer/gerer-les-horaires" class="back">Retour au tableau de gestion 
+            </a>
+            <br/>
+<br/>
+<br>
+            <br>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>

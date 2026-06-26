@@ -25,6 +25,7 @@ function createSlug($string)
     $string = trim($string, '-');
     return $string;
 }
+$titleParts= explode (' ', $data['title'], 2);
 
 ?>
 
@@ -36,7 +37,7 @@ function createSlug($string)
   <title>Réalisation: <?php echo htmlspecialchars($data['title']); ?> – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); background: var(--bg-light); }
 
@@ -354,13 +355,18 @@ function createSlug($string)
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
-        <a href="realisations.php">Réalisations</a>
+        <a href="/StandComputer/realisations">Réalisations</a>
         <span class="sep">›</span>
         <span class="current"><?php echo htmlspecialchars($data['title']); ?></span>
       </div>
-      <h1><?php echo htmlspecialchars($data['title']); ?></h1>
+      <h1>
+     <?php echo  htmlspecialchars($titleParts[0]); ?>
+              <?php if (isset ($titleParts[1])) :?>
+                <span class="accent"> <?php echo  htmlspecialchars($titleParts[1]); ?></span>
+              <?php endif; ?>
+              </h1>
       <p>Découvrez en détail ce projet réalisé par notre équipe d'experts.</p>
     </div>
   </section>
@@ -387,7 +393,7 @@ function createSlug($string)
         $imageCount = 0;
         foreach($images as $img): 
           $imageCount++;
-          $imagePath = "admin/uploads/realisations/" . $img['image_path'];
+          $imagePath = "/StandComputer/admin/uploads/realisations/" . $img['image_path'];
         ?>
         <div class="image-card fade-in">
           <div class="image-wrapper">
@@ -427,12 +433,12 @@ if ($videos->rowCount() > 0):
 <div class="realisation-gallery">
   <?php foreach ($videos as $video): 
     $videoCount++;
-    $videoPath = "admin/uploads/realisations/videos/" . $video['video_path'];
+    $videoPath = "/StandComputer/admin/uploads/realisations/videos/" . $video['video_path'];
   ?>
   <div class="image-card fade-in">
     <div class="image-wrapper" style="height: auto; background: #000;">
-      <video controls preload="metadata" style="width:100%; display:block;">
-        <source src="<?php echo htmlspecialchars($videoPath); ?>" type="video/mp4">
+      <video controls preload="metadata" style="width:100%; aspect-ratio:16/9; object-fit:cover; display:block;">
+        <source src="<?php echo htmlspecialchars($videoPath); ?>">
         Votre navigateur ne supporte pas la lecture de vidéos.
       </video>
     </div>
@@ -449,7 +455,7 @@ if ($videos->rowCount() > 0):
       
       <!-- Bouton retour -->
       <div class="back-button" style="margin-top: 40px; text-align: center;">
-        <a href="realisations.php">
+        <a href="/StandComputer/realisations">
           <span class="material-icons-round">arrow_back</span>
           Retour à la liste des réalisations
         </a>
@@ -461,7 +467,7 @@ if ($videos->rowCount() > 0):
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
 
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>
     initComponents('realisations');
     

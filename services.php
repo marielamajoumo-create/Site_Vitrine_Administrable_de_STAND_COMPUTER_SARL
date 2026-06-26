@@ -20,7 +20,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
   <title>Services – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); }
 
@@ -124,7 +124,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Services</span>
       </div>
@@ -138,7 +138,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
       <div class="services-intro">
         <span class="section-label">Ce que nous faisons</span>
         <h2 class="section-title">Des solutions <span class="accent">adaptées à vos besoins</span></h2>
-        <p>Chaque service est conçu pour répondre aux exigences spécifiques du marché congolais et africain, avec rigueur et expertise.</p>
+        <p>Chaque service est conçu pour répondre aux exigences spécifiques du marché amerounais et africain, avec rigueur et expertise.</p>
       </div>
 
       <ul class="services-list">
@@ -166,7 +166,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
                 
                   <?php endforeach ?>
           </ul>
-          <a href="contact.php" class="btn btn-primary">Demander un devis <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
+          <a href="/StandComputer/contact" class="btn btn-primary">Demander un devis <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
         </div>
       </div>
       </li>
@@ -295,7 +295,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
             <li class="off"><span class="material-icons-round">close</span> Application mobile</li>
             <li class="off"><span class="material-icons-round">close</span> Marketing digital</li>
           </ul>
-          <a href="contact.php" class="btn btn-outline-dark">Demander un devis</a>
+          <a href="/StandComputer/contact" class="btn btn-outline-dark">Demander un devis</a>
         </div>
         <div class="pricing-card featured fade-in">
           <div class="pricing-badge">Recommandé</div>
@@ -309,7 +309,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
             <li><span class="material-icons-round">check</span> Identité visuelle complète</li>
             <li><span class="material-icons-round">check</span> Marketing digital (3 mois)</li>
           </ul>
-          <a href="contact.php" class="btn btn-primary">Demander un devis</a>
+          <a href="/StandComputer/contact" class="btn btn-primary">Demander un devis</a>
         </div>
         <div class="pricing-card fade-in">
           <h3>Entreprise</h3>
@@ -322,7 +322,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
             <li><span class="material-icons-round">check</span> Marketing digital continu</li>
             <li><span class="material-icons-round">check</span> Support prioritaire 24/7</li>
           </ul>
-          <a href="contact.php" class="btn btn-outline-dark">Nous contacter</a>
+          <a href="/StandComputer/contact" class="btn btn-outline-dark">Nous contacter</a>
         </div>
       </div>
     </div>
@@ -334,7 +334,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
         <h2>Pas sûr du service qu'il vous faut ?</h2>
         <p>Contactez-nous, nous analyserons vos besoins et vous conseillerons gratuitement.</p>
       </div>
-      <a href="contact.php" class="btn btn-primary">
+      <a href="/StandComputer/contact" class="btn btn-primary">
         Consultation gratuite <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
     </div>
@@ -342,7 +342,7 @@ $realisations = $pdo->query("SELECT * FROM realisations ")->fetchAll(PDO::FETCH_
 
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>initComponents('services');</script>
 </body>
 </html>

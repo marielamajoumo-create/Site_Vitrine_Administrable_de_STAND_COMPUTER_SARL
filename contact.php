@@ -16,7 +16,7 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
   <title>Contact – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); }
 
@@ -188,6 +188,12 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
     .li { background: #0A66C2; }
     .ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
     .wa { background: #25D366; }
+    .tt {
+    background: #000;
+    box-shadow: 
+        -2px 0 #25F4EE,
+         2px 0 #FE2C55;
+}
     .social-card h3 { font-size: .9rem; font-weight: 700; margin-bottom: 4px; }
     .social-card p { font-size: .78rem; color: var(--text-muted); }
 
@@ -209,7 +215,7 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Contact</span>
       </div>
@@ -269,16 +275,31 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
           </div>
 
           <div class="hours-grid">
-            <h4>Heures d'ouverture</h4>
-              <?php foreach ($horaires as $horaire) : ?>
-                <div class="hours-row"><span> <?php echo $horaire['jour']; ?></span><span class="open"><?php echo $horaire['ouvertureFermeture']; ?></span></div>
-             
-          
-                  <?php if ($horaire['ouvertureFermeture']=== 'ferme') : ?>
-                      <div class="hours-row"><span> <?php echo $horaire['jour']; ?></span><span class="closed">Fermé</span></div>
-                  <?php endif ?>
-              <?php endforeach ?>
-          </div>
+    <h4>Heures d'ouverture</h4>
+
+    <?php foreach ($horaires as $horaire) : ?>
+
+        <?php if ($horaire['ouvertureFermeture'] === 'ferme') : ?>
+
+            <div class="hours-row">
+                <span><?= $horaire['jour']; ?></span>
+                <span class="closed">Fermé</span>
+            </div>
+
+        <?php else : ?>
+
+            <div class="hours-row">
+                <span><?= $horaire['jour']; ?></span>
+                <span class="open">
+                    <?= $horaire['ouvertureFermeture']; ?>
+                </span>
+            </div>
+
+        <?php endif; ?>
+
+    <?php endforeach; ?>
+
+</div>
         </div>
 
         <!-- Formulaire -->
@@ -364,17 +385,17 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
         <a href="#" class="social-card fade-in">
           <div class="s-icon fb">f</div>
           <h3>Facebook</h3>
-          <p>@StandComputerSARL</p>
+          <p>STAND-COMPUTER sarl</p>
         </a>
         <a href="#" class="social-card fade-in">
-          <div class="s-icon li">in</div>
-          <h3>LinkedIn</h3>
-          <p>Stand Computer SARL</p>
+          <div class="s-icon tt">tt</div>
+          <h3>TikTok</h3>
+          <p>STAND-COMPUTER sarl</p>
         </a>
         <a href="#" class="social-card fade-in">
           <div class="s-icon ig">ig</div>
           <h3>Instagram</h3>
-          <p>@standcomputer</p>
+          <p>STAND-COMPUTER sarl</p>
         </a>
         <?php foreach ($contacts as $contact) : ?>
          <a href="https://wa.me/<?php echo $contact['whatsapp']; ?>" class="social-card fade-in" target="_blank">
@@ -392,10 +413,87 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
 
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>
     initComponents ('contact');
-       document.getElementById('contactForm').addEventListener('submit', (e) => {
+document.getElementById('contactForm').addEventListener('submit', (e) => {
+
+    e.preventDefault();
+
+    const form = e.target;
+
+    const nom = form.nom.value.trim();
+    const email = form.email.value.trim();
+    const telephone = form.telephone.value.trim();
+    const service = form.service.value.trim();
+    const sujet = form.sujet.value.trim();
+    const message = form.message.value.trim();
+
+    fetch('sendMessage.php', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+
+        body:
+            `nom=${encodeURIComponent(nom)}`
+            + `&email=${encodeURIComponent(email)}`
+            + `&telephone=${encodeURIComponent(telephone)}`
+            + `&service=${encodeURIComponent(service)}`
+            + `&sujet=${encodeURIComponent(sujet)}`
+            + `&message=${encodeURIComponent(message)}`
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        if(data.status === "success"){
+
+            const success = document.getElementById('formSuccess');
+
+            success.style.display = 'flex';
+
+            success.textContent = data.message;
+
+            form.reset();
+
+            /*
+            |--------------------------------------------------------------------------
+            | REDIRECTION WHATSAPP
+            |--------------------------------------------------------------------------
+            */
+
+            window.open(data.redirect, '_blank');
+
+            setTimeout(() => {
+
+                success.style.display = 'none';
+
+            }, 6000);
+
+        } else {
+
+            alert(data.message);
+
+        }
+
+    })
+
+    .catch(error => {
+
+        alert('Erreur lors de l’envoi');
+
+        console.log(error);
+
+    });
+
+});
+
+     /*  document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
 
   const form = e.target; // on récupère directement le formulaire
@@ -423,6 +521,7 @@ $contacts = $pdo->query("SELECT * FROM contacts")->fetchAll(PDO::FETCH_ASSOC);
     alert('Erreur lors de l’envoi : ' + error);
   });
 });
+*/
 </script>
 </body>
 </html>

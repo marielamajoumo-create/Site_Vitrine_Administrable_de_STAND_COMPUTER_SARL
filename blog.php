@@ -1,6 +1,19 @@
 <?php
 require_once 'config/db.php';
 
+$articlesParPage = 6;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+if($page < 1){
+    $page = 1;
+}
+$depart = ($page - 1) * $articlesParPage;
+
+
+//$articles->execute();
+
+//$articles = $articles->fetchAll();
+
 // Article en vedette
 $featured = $pdo->query("
   SELECT a.*, c.nom AS categorie
@@ -11,22 +24,36 @@ $featured = $pdo->query("
   LIMIT 1
 ")->fetch();
 
-// Articles récents
+$featuredTags = [];
+
+if ($featured) {
+    $tagStmt = $pdo->prepare("
+        SELECT t.nom, t.slug
+        FROM tags t
+        INNER JOIN article_tags at ON at.tag_id = t.id
+        WHERE at.article_id = ?
+    ");
+    $tagStmt->execute([$featured['id']]);
+    $featuredTags = $tagStmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/* Articles récents
 $articles = $pdo->query("
   SELECT a.*, c.nom AS categorie
   FROM articles a
   LEFT JOIN categories c ON a.categorie_id = c.id
   WHERE a.featured = 0
   ORDER BY a.date_pub DESC
-")->fetchAll();
+  LIMIT $depart, $articlesParPage
+")->fetchAll();*/
 
 // Catégories sidebar
 $categories = $pdo->query("
   SELECT c.*, COUNT(a.id) AS total
   FROM categories c
-  LEFT JOIN articles a ON a.categorie_id = c.id
+  LEFT JOIN articles a ON a.categorie_id = c.id AND a.featured = 0
   GROUP BY c.id
-")->fetchAll();
+")->fetchAll(PDO::FETCH_ASSOC);
 
 // Articles récents sidebar
 $recent = $pdo->query("
@@ -35,6 +62,118 @@ $recent = $pdo->query("
   ORDER BY date_pub DESC
   LIMIT 3
 ")->fetchAll();
+
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+//$cat = isset($_GET['cat']) ? (int) $_GET['cat'] : 0;
+$cat = isset($_GET['cat']) ? trim($_GET['cat']) : '';
+
+$countSql = "
+SELECT COUNT(*) as total
+FROM articles a
+LEFT JOIN categories c ON a.categorie_id = c.id
+WHERE a.featured = 0
+";
+
+if (!empty($search)) {
+    $countSql .= "
+        AND (
+            a.titre LIKE :search
+            OR a.contenu LIKE :search
+        )
+    ";
+}
+
+if (!empty($cat)) {
+    $countSql .= "
+        AND c.nom = :cat
+    ";
+}
+
+$countStmt = $pdo->prepare($countSql);
+
+if (!empty($search)) {
+    $countStmt->bindValue(':search', "%$search%");
+}
+
+if (!empty($cat)) {
+    $countStmt->bindValue(':cat', $cat);
+}
+
+$countStmt->execute();
+
+$total = $countStmt->fetch()['total'];
+
+$totalPages = ceil($total / $articlesParPage);
+
+$sql = "
+SELECT a.*, c.nom AS categorie
+FROM articles a
+LEFT JOIN categories c ON a.categorie_id = c.id
+WHERE a.featured = 0
+";
+
+if(!empty($search)){
+   $sql .= " AND (a.titre LIKE :search OR a.contenu LIKE :search)";
+}
+
+/*if($cat > 0){
+   $sql .= " AND a.categorie_id = :cat";
+}*/
+
+if(!empty($cat)){
+   $sql .= " AND c.nom = :cat";
+}
+
+$sql .= " ORDER BY a.date_pub DESC
+LIMIT $depart, $articlesParPage";
+
+$stmt = $pdo->prepare($sql);
+
+if(!empty($search)){
+   $stmt->bindValue(':search', "%$search%");
+}
+
+/*if($cat > 0){
+   $stmt->bindValue(':cat', $cat, PDO::PARAM_INT);
+   
+}*/
+if(!empty($cat)){
+   $stmt->bindValue(':cat', $cat);
+}
+
+$stmt->execute();
+
+$articles = $stmt->fetchAll();
+
+foreach ($articles as &$article) {
+
+    $tagStmt = $pdo->prepare("
+        SELECT t.nom, t.slug
+        FROM tags t
+        INNER JOIN article_tags at
+            ON at.tag_id = t.id
+        WHERE at.article_id = ?
+        ORDER BY t.nom
+        LIMIT 4
+    ");
+
+    $tagStmt->execute([$article['id']]);
+
+    $article['tags'] = $tagStmt->fetchAll(PDO::FETCH_ASSOC);
+}
+unset($article);
+$popularTags = $pdo->query("
+    SELECT
+        t.nom,
+        t.slug,
+        COUNT(at.article_id) AS total
+    FROM tags t
+    INNER JOIN article_tags at
+        ON at.tag_id = t.id
+    GROUP BY t.id
+    ORDER BY total DESC, t.nom ASC
+    LIMIT 15
+")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -50,7 +189,7 @@ $recent = $pdo->query("
   <title>Blog – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); }
 
@@ -220,11 +359,33 @@ $recent = $pdo->query("
     }
     .page-btn.active, .page-btn:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
 
+    .article-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.article-tags a{
+    color:var(--primary);
+    text-decoration:none;
+    font-size:.8rem;
+    font-weight:600;
+}
+
+.article-tags a:hover{
+    text-decoration:underline;
+}
     @media (max-width: 900px) {
       .blog-layout { grid-template-columns: 1fr; }
       .blog-sidebar { position: static; }
       .articles-grid { grid-template-columns: 1fr; }
     }
+    .active-cat{
+   color: var(--primary) !important;
+   font-weight: 700;
+   padding-left: 6px;
+}
   </style>
 </head>
 <body>
@@ -234,7 +395,7 @@ $recent = $pdo->query("
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Blog</span>
       </div>
@@ -266,8 +427,23 @@ $recent = $pdo->query("
     <h2><?= htmlspecialchars($featured['titre']) ?></h2>
 
     <p><?= substr(strip_tags($featured['contenu']), 0, 200) ?>...</p>
+    <?php if(!empty($a['tags'])): ?>
 
-    <a href="article.php?id=<?= $featured['id'] ?>" class="read-more">
+<div class="article-tags">
+
+    <?php foreach($a['tags'] as $tag): ?>
+
+        <a href="/StandComputer/tag/<?= htmlspecialchars($tag['slug']) ?>">
+            #<?= htmlspecialchars($tag['nom']) ?>
+        </a>
+
+    <?php endforeach; ?>
+
+</div>
+
+<?php endif; ?>
+
+    <a href="/StandComputer/article/<?= $featured['id']?>" class="read-more">
       Lire l'article <span class="material-icons-round">arrow_forward</span>
     </a>
   </div>
@@ -280,7 +456,7 @@ $recent = $pdo->query("
 <?php foreach($articles as $a): ?>
   <div class="article-card fade-in">
     <div class="article-thumb">
-      <img src="admin/uploads/articles/<?= htmlspecialchars($a['image']) ?>" />
+      <img src="/StandComputer/admin/uploads/articles/<?= htmlspecialchars($a['image']) ?>" />
     </div>
 
     <div class="article-body">
@@ -292,8 +468,23 @@ $recent = $pdo->query("
       <h3><?= htmlspecialchars($a['titre']) ?></h3>
 
       <p><?= substr(strip_tags($a['contenu']), 0, 120) ?>...</p>
+      <?php if(!empty($a['tags'])): ?>
 
-      <a href="article.php?id=<?= $a['id'] ?>" class="read-more">
+<div class="article-tags">
+
+    <?php foreach($a['tags'] as $tag): ?>
+
+        <a href="/StandComputer/tag/<?= htmlspecialchars($tag['slug']) ?>">
+            #<?= htmlspecialchars($tag['nom']) ?>
+        </a>
+
+    <?php endforeach; ?>
+
+</div>
+
+<?php endif; ?>
+
+      <a href="/StandComputer/article/<?php echo $a['id']; ?>" class="read-more">
         Lire la suite <span class="material-icons-round">arrow_forward</span>
       </a>
     </div>
@@ -305,12 +496,58 @@ $recent = $pdo->query("
           
 
           <!-- Pagination -->
+           
+
+<?php
+
+$queryParams = [];
+
+if (!empty($search)) {
+    $queryParams['search'] = $search;
+}
+
+if (!empty($cat)) {
+    $queryParams['cat'] = $cat;
+}
+
+?>
+
+
           <div class="pagination">
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn"><span class="material-icons-round" style="font-size:16px">chevron_right</span></button>
-          </div>
+    <!-- Bouton précédent -->
+    <?php if($page > 1): ?>
+        <a href="?page=<?= $page - 1 ?>" class="page-btn">
+            <span class="material-icons-round" style="font-size:16px">
+                chevron_left
+            </span>
+        </a>
+    <?php endif; ?>
+    <?php for($i = 1; $i <= $totalPages; $i++): ?>
+
+        <a 
+          <?php
+$params = array_merge(
+    $queryParams,
+    ['page' => $i]
+);
+?>
+
+href="?<?= http_build_query($params) ?>"
+           class="page-btn <?= ($i == $page) ? 'active' : '' ?>"
+        >
+            <?= $i ?>
+        </a>
+
+    <?php endfor; ?>
+    <?php if($page < $totalPages): ?>
+        <a href="?page=<?= $page + 1 ?>" class="page-btn">
+            <span class="material-icons-round" style="font-size:16px">
+                chevron_right
+            </span>
+        </a>
+    <?php endif; ?>
+
+    </div>
         </div>
 
         <!-- Sidebar -->
@@ -318,27 +555,30 @@ $recent = $pdo->query("
         <aside class="blog-sidebar">
           <div class="sidebar-widget">
             <h3>Rechercher</h3>
-            <div class="search-form">
-              <input type="text" placeholder="Rechercher un article..." />
-              <button><span class="material-icons-round" style="font-size:18px">search</span></button>
-            </div>
+            <form method="GET" class="search-form">
+              <input type="text" name="search"  value="<?= htmlspecialchars($search) ?>" placeholder="Rechercher un article..." />
+              <button type="submit"><span class="material-icons-round" style="font-size:18px">search</span></button>
+            </form>
           </div>
 
           <div class="sidebar-widget">
             <h3>Catégories</h3>
             <ul class="cat-list">
-              <ul class="cat-list">
-<?php foreach($categories as $c): ?>
-  <li>
-    <a href="blog.php?cat=<?= $c['id'] ?>">
-      <?= htmlspecialchars($c['nom']) ?>
-      <span class="count"><?= $c['total'] ?></span>
-    </a>
-  </li>
-<?php endforeach; ?>
-</ul>
-              
-          </div>
+              <?php foreach($categories as $c): ?>
+               <li>
+                 <a 
+                   href="/StandComputer/blog?cat=<?= urlencode($c['nom']) ?>"
+                   class="<?= ($cat === $c['nom']) ? 'active-cat' : '' ?>"
+                 
+                  >
+    
+                   <?= htmlspecialchars($c['nom']) ?>
+                  <span class="count"><?= $c['total'] ?></span>
+                  </a>
+                </li>
+              <?php endforeach; ?>
+          </ul>
+        </div>
 
           <div class="sidebar-widget">
             <h3>Articles récents</h3>
@@ -348,28 +588,31 @@ $recent = $pdo->query("
     <img src="admin/uploads/articles/<?= htmlspecialchars($r['image']) ?>" />
   </div>
   <div class="recent-info">
-    <h4><?= htmlspecialchars($r['titre']) ?></h4>
+    <a href="/StandComputer/article/<?= $r['id'] ?>">
+   <h4><?= htmlspecialchars($r['titre']) ?></h4>
+</a>
     <span><?= date('d M Y', strtotime($r['date_pub'])) ?></span>
   </div>
 </div>
 <?php endforeach; ?>
             
           </div>
+<div class="sidebar-widget">
+  <h3> Tags </h3>
+          <div class="tags-cloud">
 
-          <div class="sidebar-widget">
-            <h3>Tags</h3>
-            <div class="tags-cloud">
-              <span class="tag-chip">Réseau</span>
-              <span class="tag-chip">Cybersécurité</span>
-              <span class="tag-chip">Web</span>
-              <span class="tag-chip">Mobile</span>
-              <span class="tag-chip">Design</span>
-              <span class="tag-chip">Marketing</span>
-              <span class="tag-chip">Cisco</span>
-              <span class="tag-chip">Windows</span>
-              <span class="tag-chip">Linux</span>
-              <span class="tag-chip">Cloud</span>
-            </div>
+<?php foreach($popularTags as $tag): ?>
+
+    <a
+        href="/StandComputer/tag/<?= htmlspecialchars($tag['slug']) ?>"
+        class="tag-chip"
+    >
+        #<?= htmlspecialchars($tag['nom']) ?>
+    </a>
+
+<?php endforeach; ?>
+
+</div>
           </div>
         </aside>
 
@@ -391,7 +634,7 @@ $recent = $pdo->query("
 
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>initComponents('blog');</script>
 </body>
 </html>

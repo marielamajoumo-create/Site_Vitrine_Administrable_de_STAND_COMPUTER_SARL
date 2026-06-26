@@ -1,7 +1,6 @@
 <?php
 session_start();
-include '../../config/db.php';
-
+require_once __DIR__ . '/../../config/db.php';
 $horaires = $pdo->query("SELECT * FROM horaires ORDER BY id DESC")
                 ->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -24,8 +23,8 @@ $horaires = $pdo->query("SELECT * FROM horaires ORDER BY id DESC")
         <td><?= $h['ouvertureFermeture'] ?></td>
 
         <td>
-            <a href="edit.php?id=<?= $h['id'] ?>" class="btn btn-edit">Modifier</a>
-            <a href="delete.php?id=<?= $h['id'] ?>"
+            <a href="/StandComputer/modifier-cet-horaire?id=<?= $h['id'] ?>" class="btn btn-edit">Modifier</a>
+            <a href="/StandComputer/supprimer-horaire?id=<?= $h['id'] ?>"
             class="btn btn-delete"
                onclick="return confirm('Supprimer ?')">
                Supprimer

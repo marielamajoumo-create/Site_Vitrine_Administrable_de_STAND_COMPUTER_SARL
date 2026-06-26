@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
     header("Location: ../login.php");
@@ -16,8 +16,7 @@ if ($id <= 0) {
 
 if (isset($_POST['upload'])) {
 
-    $uploadDir = "../uploads/realisations/videos/";
-
+    $uploadDir = __DIR__ . '/../uploads/realisations/videos/';
     // Créer le dossier s'il n'existe pas
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
@@ -47,7 +46,7 @@ if (isset($_POST['upload'])) {
     }
 
     // Recharger la page après upload
-    header("Location: upload_videos.php?id=" . $id);
+    header("Location: /StandComputer/modifier-les-videos-de-cette-realisation?id=" . $id);
     exit();
 }
 
@@ -63,7 +62,7 @@ $videos->execute([$id]);
 $gallery = $videos->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Ajouter / Gérer les Vidéos</h1>
 
@@ -89,7 +88,7 @@ $gallery = $videos->fetchAll(PDO::FETCH_ASSOC);
 
             <video width="220" controls>
                 <source
-                    src="../uploads/realisations/<?php echo htmlspecialchars($video['video_path']); ?>"
+                    src="/StandComputer/admin/uploads/realisations/videos/<?php echo htmlspecialchars($video['video_path']); ?>"
                     type="video/mp4"
                 >
                 Votre navigateur ne supporte pas la lecture vidéo.
@@ -97,8 +96,10 @@ $gallery = $videos->fetchAll(PDO::FETCH_ASSOC);
 
             <br><br>
 
+            
+
             <a
-                href="delete.php?video_id=<?php echo $video['id']; ?>&realisation_id=<?php echo $id; ?>"
+                href="/StandComputer/supprimer-realisation?video_id=<?php echo $video['id']; ?>&realisation_id=<?php echo $id; ?>"
                 class="btn btn-delete"
                 onclick="return confirm('Supprimer cette vidéo ?')"
             >
@@ -115,6 +116,11 @@ $gallery = $videos->fetchAll(PDO::FETCH_ASSOC);
 <br/>
 <br/>
 <br/>
-<a href="../dashboard.php" class="back">
-                Retour au tableau de bord 
+<a href="/StandComputer/gerer-les-realisations" class="back">Retour au tableau de gestion 
             </a>
+            <br/>
+            <br>
+            <br>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
+

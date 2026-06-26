@@ -1,9 +1,9 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
-    header("Location: ../login.php");
+    header("Location: /StandComputer/connexion");
     exit();
 }
 /* 
@@ -33,7 +33,7 @@ if (isset($_POST['update'])) {
     $description = $_POST['description'];
     $icon = $_POST['icon'];
     $image = $service['image']; // garder l’ancien par défaut
-    $uploadDir = "../uploads/services/";
+    $uploadDir = __DIR__ . '/../uploads/services/';
 
     // Vérifier si un nouveau thumbnail est uploadé
     if (!empty($_FILES['image']['name'])) {
@@ -64,14 +64,16 @@ if (isset($_POST['update'])) {
     die ("Erreur PDO : " .$e->getMessage());
 }
 
-header ("Location:manage.php? success=updated");
+header ("Location:/StandComputer/gerer-les-services? success=updated");
 exit ();
 }
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Modifier ce service</h1>
+<br>
+<br>
 
 <form method="POST" enctype="multipart/form-data">
 
@@ -87,8 +89,17 @@ exit ();
     <input type="text" name="icon"
            value="<?php echo $service['icon']; ?>">
                <label>Image principale :</label>
-    <img src="../uploads/services/<?php echo $service['image']; ?>" width="150"><br>
+    <img src="/StandComputer/uploads/services/<?php echo $service['image']; ?>" width="150"><br>
     <input type="file" name="image">
 
     <button type="submit" name="update">Mettre à jour</button>
 </form>
+<br/>
+<br/>
+<a href="/StandComputer/gerer-les-services" class="back">Retour au tableau de gestion 
+            </a>
+            <br/>
+            <br>
+            <br>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>

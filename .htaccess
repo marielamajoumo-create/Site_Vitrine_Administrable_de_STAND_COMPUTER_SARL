@@ -1,51 +1,119 @@
 RewriteEngine On
 RewriteBase /StandComputer/
 
-# priorité 1 : routes admin
-RewriteRule ^connexion/?$ admin/login.php [L]
-
-
-# priorité 2 : éviter conflit avec fichiers existants
+# =========================
+# FICHIERS EXISTANTS
+# =========================
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# fallback php
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.+)$ $1.php [L]
+# =========================
+# ACCUEIL
+# =========================
+RewriteRule ^$ index.php [L]
 
-# 3. Mapping des URLs propres vers fichiers PHP
-RewriteRule ^nos-realisations/?$ realisations.php [L]
-RewriteRule ^contact/?$ contact.php [L]
+# =========================
+# PAGES PRINCIPALES
+# =========================
 RewriteRule ^services/?$ services.php [L]
 RewriteRule ^formations/?$ formations.php [L]
+RewriteRule ^realisations/?$ realisations.php [L]
+RewriteRule ^contact/?$ contact.php [L]
+RewriteRule ^blog/?$ blog.php [L]
+RewriteRule ^tag/([a-zA-Z0-9_-]+)$ tag.php [QSA,L]
+
 
 RewriteRule ^a-propos/?$ about.php [L]
-RewriteRule ^actualites/?$ blog.php [L]
 
-RewriteRule ^details-des-realisations/?$ realisation_details.php [L]
+RewriteRule ^db/?$ config/db.php [L]
+
+#CSS
+RewriteRule ^style-admin/?$ assets/css/admin.css [L]
+RewriteRule ^style-article/?$ assets/css/article.css [L]
+RewriteRule ^style/?$ assets/css/style.css [L]
+RewriteRule ^shared/?$ assets/css/shared.css [L]
+
+
+#JavaScript
+RewriteRule ^components/?$ components.js [L]
+RewriteRule ^service-worker/?$ service-worker.js [L]
+RewriteRule ^manifest/?$ manifest.json [L]
+
+# =========================
+# REALISATIONS
+# =========================
+RewriteRule ^nos-realisations/?$ realisations.php [L]
+
+RewriteRule ^details-des-realisations/([0-9]+)/?$ realisation_details.php?id=$1 [L,QSA]
+RewriteRule ^article/([0-9]+)/?$ article.php?id=$1 [L,QSA]
+
+# =========================
+# ADMIN
+# =========================
+RewriteRule ^connexion/?$ admin/login.php [L]
 RewriteRule ^tableau-de-bord/?$ admin/dashboard.php [L]
 RewriteRule ^deconnexion/?$ admin/logout.php [L]
-RewriteRule ^style-admin/?$ assets/css/admin.css
 
+# services admin
 RewriteRule ^ajouter-un-service/?$ admin/services/add.php [L]
 RewriteRule ^gerer-les-services/?$ admin/services/manage.php [L]
+RewriteRule ^modifier-ce-service/?$ admin/services/edit.php [L]
+RewriteRule ^supprimer-service/?$ admin/services/delete.php [L]
 
+ #realisations admin
+RewriteRule ^ajouter-une-realisation/?$ admin/realisations/add.php [L]
+RewriteRule ^gerer-les-realisations/?$ admin/realisations/manage.php [L]
+RewriteRule ^modifier-cette-realisation/?$ admin/realisations/edit.php [L]
+RewriteRule ^modifier-les-images-de-cette-realisation/?$ admin/realisations/upload_images.php [L]
+RewriteRule ^modifier-les-videos-de-cette-realisation/?$ admin/realisations/upload_videos.php [L]
+RewriteRule ^supprimer-realisation/?$ admin/realisations/delete.php [L]
+
+# formations admin
 RewriteRule ^ajouter-une-formation/?$ admin/formations/add.php [L]
 RewriteRule ^gerer-les-formations/?$ admin/formations/manage.php [L]
+RewriteRule ^modifier-cette-formation/?$ admin/formations/edit.php [L]
+RewriteRule ^supprimer-formation/?$ admin/formations/delete.php [L]
 
+# blog admin
 RewriteRule ^ajouter-un-article/?$ admin/blog/add.php [L]
 RewriteRule ^gerer-les-articles/?$ admin/blog/manage.php [L]
+RewriteRule ^modifier-cet-article/?$ admin/blog/edit.php [L]
+RewriteRule ^supprimer-article/?$ admin/blog/delete.php [L]
 
+# categories articles admin
+RewriteRule ^ajouter-une-categorie/?$ admin/categories/add.php [L]
+RewriteRule ^gerer-les-categories/?$ admin/categories/manage.php [L]
+RewriteRule ^modifier-cette-categorie/?$ admin/categories/edit.php [L]
+RewriteRule ^supprimer-categorie/?$ admin/categories/delete.php [L]
+
+# contacts admin
 RewriteRule ^ajouter-un-contact/?$ admin/contacts/add.php [L]
 RewriteRule ^gerer-les-contacts/?$ admin/contacts/manage.php [L]
+RewriteRule ^modifier-ce-contact/?$ admin/contacts/edit.php [L]
+RewriteRule ^supprimer-contact/?$ admin/contact/delete.php [L]
 
+
+# horaires admin
 RewriteRule ^ajouter-une-horaire/?$ admin/horaires/add.php [L]
 RewriteRule ^gerer-les-horaires/?$ admin/horaires/manage.php [L]
+RewriteRule ^modifier-cet-horaire/?$ admin/horaires/edit.php [L]
+RewriteRule ^supprimer-horaire/?$ admin/horaires/delete.php [L]
 
+# formulaires admin
 RewriteRule ^gerer-les-formulaires-de-contact/?$ admin/formulaire_contact/manage.php [L]
+RewriteRule ^messages/?$ admin/formulaire_contact/messages.php [L]
+RewriteRule ^lire/?$ admin/formulaire_contact/message_view.php [L]
+RewriteRule ^lu-repondu/?$ admin/formulaire_contact/message_update.php [L]
+RewriteRule ^supprimer-message/?$ admin/formulaire_contact/message_delete.php [L]
 
 
+# statistiques admin
+RewriteRule ^modifier-les-statistiques/?$ admin/statistiques/edit.php [L]
 
-# 4. Page d’accueil
-RewriteRule ^$ index.php [L]
+# gestion-admins admin
+RewriteRule ^ajouter-un-administrateur/?$ admin/gestion-admins/add.php [L]
+RewriteRule ^gerer-les-administrateurs/?$ admin/gestion-admins/manage.php [L]
+RewriteRule ^modifier-cet-article/?$ admin/blog/edit.php [L]
+RewriteRule ^supprimer-article/?$ admin/blog/delete.php [L]
+

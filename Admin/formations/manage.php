@@ -1,9 +1,9 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
-    header("Location: ../login.php");
+    header("Location: /StandComputer/connexion");
     exit();
 }
 
@@ -13,9 +13,12 @@ $formations = $pdo->query("SELECT * FROM formations")->fetchAll(PDO::FETCH_ASSOC
 <link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Gestion des Formations</h1>
+<br>
+<br>
 
-<a href="../formations/add.php" class="btn btn-add">+ Ajouter</a>
-
+<a href="/StandComputer/ajouter-une-formation" class="btn btn-add">+ Ajouter</a>
+<br>
+<br>
 <table>
     <tr>
         <th>ID</th>
@@ -35,7 +38,8 @@ $formations = $pdo->query("SELECT * FROM formations")->fetchAll(PDO::FETCH_ASSOC
         <td><?php echo $formation['id']; ?></td>
 
         <td>
-            <img src="../uploads/<?php echo $formation['image']; ?>" width="80">
+            
+            <img src="/StandComputer/admin/uploads/formations/<?php echo $formation['image']; ?>" width="80">
         </td>
 
         <td><?php echo htmlspecialchars($formation['title']); ?></td>
@@ -49,9 +53,9 @@ $formations = $pdo->query("SELECT * FROM formations")->fetchAll(PDO::FETCH_ASSOC
         <td><?php echo htmlspecialchars($formation['duration']); ?></td>
 
         <td>
-            <a href="edit.php?id=<?php echo $formation['id']; ?>" class="btn btn-edit">Modifier</a>
+            <a href="/StandComputer/modifier-cette-formation?id=<?php echo $formation['id']; ?>" class="btn btn-edit">Modifier</a>
 
-            <a href="delete.php?id=<?php echo $formation['id']; ?>" class="btn btn-delete"
+            <a href="/StandComputer/supprimer-formation?id=<?php echo $formation['id']; ?>" class="btn btn-delete"
                onclick="return confirm('Supprimer cette formation ?');">
                Supprimer
             </a>

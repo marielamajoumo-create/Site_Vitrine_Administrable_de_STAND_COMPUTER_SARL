@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (isset($_POST['submit'])) {
 
@@ -17,14 +17,16 @@ if (isset($_POST['submit'])) {
         $ouvertureFermeture
     ]);
 
-    header("Location: manage.php");
+    header("Location: /StandComputer/gerer-les-horaires");
     exit();
 }
 ?>
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
 
 <h1>Ajouter Horaire</h1>
+<br>
+<br>
 
 <form method="POST">
 
@@ -34,3 +36,7 @@ if (isset($_POST['submit'])) {
     <button type="submit" name="submit">Ajouter</button>
 
 </form>
+<br>
+<br>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>

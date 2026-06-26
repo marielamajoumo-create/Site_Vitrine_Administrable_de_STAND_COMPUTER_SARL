@@ -2,7 +2,7 @@
 
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $id = $_GET['id'];
 
@@ -22,7 +22,7 @@ if (isset($_POST['update'])) {
 
 
     $image = $formation['image']; // garder l’ancien par défaut
-    $uploadDir = "../uploads/formations/";
+    $uploadDir = __DIR__ . '/../uploads/formations/';
 
     // Vérifier si un nouveau thumbnail est uploadé
     if (!empty($_FILES['image']['name'])) {
@@ -55,14 +55,16 @@ if (isset($_POST['update'])) {
         WHERE id=?
     ")->execute([$niveau,$title,$intitule, $description, $image,$duration,$nombrePersonne,$natureDiplome, $id]);
 
-    header("Location: manage.php");
+    header("Location: /StandComputer/gerer-les-formations");
     exit();
 }
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Modifier cette formation</h1>
+<br>
+<br>
 
 <form method="POST" enctype="multipart/form-data">
      <input type="text" name="niveau"
@@ -79,7 +81,7 @@ if (isset($_POST['update'])) {
            value="<?php echo $formation['description']; ?>">
 
     
-          <img src="../uploads/formations/<?php echo $formation['image']; ?>" width="150"><br>
+          <img src="/StandComputer/uploads/formations/<?php echo $formation['image']; ?>" width="150"><br>
           <input type="file" name="image">
             <input type="text" name="duration"
            value="<?php echo $formation['duration']; ?>">
@@ -92,4 +94,15 @@ if (isset($_POST['update'])) {
 
     <button type="submit" name="update">Mettre à jour</button>
 </form>
+<br>
+<br>
+<a href="/StandComputer/gerer-les-formations" class="back">Retour au tableau de gestion 
+            </a>
+            <br/>
+<br/>
+<br>
+            <br>
+
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
 

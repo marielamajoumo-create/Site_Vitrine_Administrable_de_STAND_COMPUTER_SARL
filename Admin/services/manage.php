@@ -1,9 +1,9 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
-    header("Location: ../login.php");
+    header("Location: /StandComputer/connexion");
     exit();
 }
 
@@ -14,7 +14,9 @@ $services = $pdo->query("SELECT * FROM services")->fetchAll(PDO::FETCH_ASSOC);
 
 <h1>Gestion des Services</h1>
 
-<a href="add.php" class="btn btn-add">+ Ajouter</a>
+<a href="/StandComputer/ajouter-un-service" class="btn btn-add">+ Ajouter</a>
+<br>
+<br>
 
 <table>
     <tr>
@@ -31,7 +33,7 @@ $services = $pdo->query("SELECT * FROM services")->fetchAll(PDO::FETCH_ASSOC);
     <tr>
         <td><?php echo $service['id']; ?></td>
         <td>
-            <img src="../uploads/services/<?php echo $service['image']; ?>" width="120">
+            <img src="/StandComputer/admin/uploads/services/<?php echo $service['image']; ?>" width="120">
         </td>
 
         <td>
@@ -43,9 +45,9 @@ $services = $pdo->query("SELECT * FROM services")->fetchAll(PDO::FETCH_ASSOC);
         <td><?php echo htmlspecialchars($service['description']); ?></td>
 
         <td>
-            <a href="edit.php?id=<?php echo $service['id']; ?>" class="btn btn-edit">Modifier</a>
+            <a href="/StandComputer/modifier-ce-service?id=<?php echo $service['id']; ?>" class="btn btn-edit">Modifier</a>
 
-            <a href="delete.php?id=<?php echo $service['id']; ?>" class="btn btn-delete"
+            <a href="/StandComputer/supprimer-service?id=<?php echo $service['id']; ?>" class="btn btn-delete"
                onclick="return confirm('Supprimer ce service ?');">
                Supprimer
             </a>

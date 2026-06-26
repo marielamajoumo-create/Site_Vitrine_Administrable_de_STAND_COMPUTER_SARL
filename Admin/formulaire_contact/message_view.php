@@ -8,6 +8,7 @@ if ($id) {
     $msg = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 ?>
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <style>
 /* ==========================================
@@ -197,7 +198,7 @@ if ($id) {
     </div>
 
     <div class="message-actions">
-        <a href="manage.php" class="back">← Retour aux messages</a>
+        <a href="/StandComputer/gerer-les-formulaires-de-contact" class="back">← Retour aux messages</a>
     </div>
 
 </div>

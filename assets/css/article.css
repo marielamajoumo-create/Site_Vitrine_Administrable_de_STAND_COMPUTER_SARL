@@ -52,11 +52,21 @@ body {
   padding: 70px 0;
 }
 
-.article-layout {
+.article-layout{
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: 1fr;
   gap: 40px;
-  align-items: start;
+}
+
+.article-bottom-layout{
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 40px;
+  align-items:start;
+}
+.article-content-card{
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* =========================

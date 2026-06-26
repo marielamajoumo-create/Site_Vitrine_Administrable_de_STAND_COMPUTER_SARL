@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
     header("Location: ../login.php");
@@ -14,8 +14,12 @@ $contacts = $pdo->query("SELECT * FROM contacts ORDER BY id DESC")
 <link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Contacts</h1>
+<br/>
+<br/>
 
-<a href="add.php" class="btn btn-add">+ Ajouter</a>
+<a href="/StandComputer/ajouter-un-contact" class="btn btn-add">+ Ajouter</a>
+<br/>
+<br/>
 
 <table>
     <tr>
@@ -34,8 +38,8 @@ $contacts = $pdo->query("SELECT * FROM contacts ORDER BY id DESC")
         <td><?= $c['localisation'] ?></td>
 
         <td>
-            <a href="edit.php?id=<?= $c['id'] ?>" class="btn btn-edit">Modifier</a>
-            <a href="delete.php?id=<?= $c['id'] ?>"
+            <a href="/StandComputer/modifier-ce-contact?id=<?= $c['id'] ?>" class="btn btn-edit">Modifier</a>
+            <a href="/StandComputer/modifier-contact?id=<?= $c['id'] ?>"
              class="btn btn-delete"
                onclick="return confirm('Supprimer ?')">
                Supprimer

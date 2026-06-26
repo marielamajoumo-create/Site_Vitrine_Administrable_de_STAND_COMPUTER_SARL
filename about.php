@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,7 +7,7 @@
   <title>À propos – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); }
 
@@ -160,7 +161,7 @@
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
         <span class="current">À propos</span>
       </div>
@@ -188,7 +189,7 @@
           <p>
             Notre engagement est de fournir des solutions durables, adaptées aux réalités locales, avec des services  de qualité, adaptés à vos besoins specifiques.
           </p>
-          <a href="contact.php" class="btn btn-primary">Travailler avec nous <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
+          <a href="/StandComputer/contact" class="btn btn-primary">Travailler avec nous <span class="material-icons-round" style="font-size:18px">arrow_forward</span></a>
         </div>
       </div>
     </div>
@@ -337,7 +338,7 @@
         <h2>Prêt à démarrer votre transformation numérique ?</h2>
         <p>Notre équipe est disponible pour étudier votre besoin et vous proposer la meilleure solution.</p>
       </div>
-      <a href="contact.php" class="btn btn-primary">
+      <a href="/StandComputer/contact" class="btn btn-primary">
         Demander un devis <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
     </div>
@@ -346,7 +347,7 @@
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
 
-  <script src="components.js"></script>
-  <script>initComponents('about');</script>
+  <script src="/StandComputer/components"></script>
+  <script>initComponents('about') </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 $base = '/StandComputer/';
 
 /* =========================
@@ -10,6 +10,9 @@ if (!isset($_SESSION['admin'])) {
     header("Location: /StandComputer/connexion");
     exit();
 }
+$adminNom = $_SESSION['admin'];
+$adminRole = $_SESSION['admin_role'] ?? 'admin';
+$adminId = $_SESSION['admin_id'] ?? 0;
 
 
 /* =========================
@@ -19,10 +22,12 @@ $totalServices = $pdo->query("SELECT COUNT(*) FROM services")->fetchColumn();
 $totalFormations = $pdo->query("SELECT COUNT(*) FROM formations")->fetchColumn();
 $totalRealisations = $pdo->query("SELECT COUNT(*) FROM realisations")->fetchColumn();
 $totalImages = $pdo->query("SELECT COUNT(*) FROM realisation_images")->fetchColumn();
+$totalVideos = $pdo->query("SELECT COUNT(*) FROM realisation_videos")->fetchColumn();
 $totalMessages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 $totalContacts = $pdo->query("SELECT COUNT(*) FROM contacts")->fetchColumn();
 $totalHoraires = $pdo->query("SELECT COUNT(*) FROM horaires")->fetchColumn();
 $totalarticles = $pdo->query("SELECT COUNT(*) FROM articles")->fetchColumn();
+$totalcategoriesarticles = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
 
 
 /* =========================
@@ -349,67 +354,109 @@ tbody tr:hover {
          SIDEBAR ADMIN
     ========================== -->
     <aside class="sidebar">
-    <aside class="sidebar">
     <h2>
-        <span class="material-symbols-outlined" style="color:#6c5ce7;">settings</span>
+        <span class="material-symbols-outlined" style="color:#FFB300;">admin_panel_settings</span>
         STAND ADMIN
     </h2>
 
     <a href="<?= $base ?>tableau-de-bord">
-        <span class="material-symbols-outlined" style="color:#00b894;">dashboard</span>
+        <span class="material-symbols-outlined" style="color:#FFC107;">dashboard</span>
         Dashboard
     </a>
 
+    <?php if($adminRole === 'super_admin'): ?>
+
+       <a href="<?= $base ?>gerer-les-administrateurs">
+           <span class="material-symbols-outlined" style="color:#FFC107;">manage_accounts</span>
+           Gestion Administrateurs
+       </a>
+
+    <?php endif; ?>
+
     <a href="<?= $base ?>ajouter-un-service">
-        <span class="material-symbols-outlined" style="color:#0984e3;">add_circle</span>
+        <span class="material-symbols-outlined" style="color:#FF6F00;">add_circle</span>
         Ajouter Service
     </a>
 
     <a href="<?= $base ?>gerer-les-services">
-        <span class="material-symbols-outlined" style="color:#2d3436;">list</span>
+        <span class="material-symbols-outlined" style="color:#FFA726;">construction</span>
         Gérer Services
     </a>
 
     <a href="<?= $base ?>ajouter-une-formation">
-        <span class="material-symbols-outlined" style="color:#6c5ce7;">school</span>
+        <span class="material-symbols-outlined" style="color:#FFD54F;">school</span>
         Ajouter Formation
     </a>
 
     <a href="<?= $base ?>gerer-les-formations">
-        <span class="material-symbols-outlined" style="color:#fdcb6e;">menu_book</span>
+        <span class="material-symbols-outlined" style="color:#FFCA28;">menu_book</span>
         Gérer Formations
     </a>
 
     <a href="<?= $base ?>ajouter-une-realisation">
-        <span class="material-symbols-outlined" style="color:#e17055;">add_box</span>
+        <span class="material-symbols-outlined" style="color:#FF7043;">add_photo_alternate</span>
         Ajouter Réalisation
     </a>
 
     <a href="<?= $base ?>gerer-les-realisations">
-        <span class="material-symbols-outlined" style="color:#d63031;">work</span>
+        <span class="material-symbols-outlined" style="color:#FF5722;">work</span>
         Gérer Réalisations
     </a>
 
+    <a href="<?= $base ?>ajouter-un-contact">
+        <span class="material-symbols-outlined" style="color:#26C6DA;">person_add</span>
+        Ajouter Contact
+    </a>
+
+    <a href="<?= $base ?>gerer-les-contacts">
+        <span class="material-symbols-outlined" style="color:#00ACC1;">contacts</span>
+        Gérer Contacts
+    </a>
+
+    <a href="<?= $base ?>ajouter-une-horaire">
+        <span class="material-symbols-outlined" style="color:#66BB6A;">schedule</span>
+        Ajouter Horaire
+    </a>
+
+    <a href="<?= $base ?>gerer-les-horaires">
+        <span class="material-symbols-outlined" style="color:#43A047;">calendar_month</span>
+        Gérer Horaires
+    </a>
+
     <a href="<?= $base ?>ajouter-un-article">
-        <span class="material-symbols-outlined" style="color:#00cec9;">edit</span>
+        <span class="material-symbols-outlined" style="color:#EC407A;">post_add</span>
         Ajouter Article
     </a>
 
     <a href="<?= $base ?>gerer-les-articles">
-        <span class="material-symbols-outlined" style="color:#0984e3;">article</span>
+        <span class="material-symbols-outlined" style="color:#D81B60;">article</span>
         Gérer Articles
     </a>
 
+    <a href="<?= $base ?>ajouter-une-categorie">
+        <span class="material-symbols-outlined" style="color:#AB47BC;">category</span>
+        Ajouter Catégorie Article
+    </a>
+
+    <a href="<?= $base ?>gerer-les-categories">
+        <span class="material-symbols-outlined" style="color:#8E24AA;">folder</span>
+        Gérer Catégories Articles
+    </a>
+
     <a href="<?= $base ?>gerer-les-formulaires-de-contact">
-        <span class="material-symbols-outlined" style="color:#e84393;">mail</span>
-        Messages de formulaire de contact
+        <span class="material-symbols-outlined" style="color:#EF5350;">mail</span>
+        Messages de Contact
+    </a>
+
+    <a href="<?= $base ?>modifier-les-statistiques">
+        <span class="material-symbols-outlined" style="color:#FF8F00;">bar_chart</span>
+        Modifier Statistiques
     </a>
 
     <a href="<?= $base ?>deconnexion">
-        <span class="material-symbols-outlined" style="color:#636e72;">logout</span>
+        <span class="material-symbols-outlined" style="color:#B0BEC5;">logout</span>
         Déconnexion
     </a>
-</aside>
 </aside>
 
     <!-- =========================
@@ -445,10 +492,22 @@ tbody tr:hover {
                 <p>Articles de blog</p>
              </div>
 
+             <div class="card">
+                <h3><?php echo $totalcategoriesarticles; ?></h3>
+                <p>Categorie des Articles de blog</p>
+             </div>
+
             <div class="card">
                 <h3><?php echo $totalImages; ?></h3>
                 <p>Images Portfolio</p>
             </div>
+
+            
+            <div class="card">
+                <h3><?php echo $totalVideos; ?></h3>
+                <p>Videos Portfolio</p>
+            </div>
+
 
             <div class="card">
                 <h3><?php echo $totalMessages; ?></h3>
@@ -507,11 +566,11 @@ tbody tr:hover {
             <h2>Actions Rapides</h2>
 
             <div class="grid">
-                <a href="formulaire_contact/manage.php" class="btn">+ Gérer Messages Contact</a>
-                <a href="services/add.php" class="btn">+ Nouveau Service</a>
-                <a href="formations/add.php" class="btn">+ Nouvelle Formation</a>
-                <a href="realisations/add.php" class="btn">+ Nouvelle Réalisation</a>
-                <a href="statistiques/edit.php" class="btn">⚙ Modifier Stats</a>
+                <a href="/StandComputer/gerer-les-formulaires-de-contact" class="btn">+ Gérer Messages Contact</a>
+                <a href="/StandComputer/ajouter-un-service" class="btn">+ Nouveau Service</a>
+                <a href="/StandComputer/ajouter-une-formation" class="btn">+ Nouvelle Formation</a>
+                <a href="/StandComputer/ajouter-une-realisation" class="btn">+ Nouvelle Réalisation</a>
+                <a href="/StandComputer/modifier-les-statistiques" class="btn">⚙ Modifier Stats</a>
             </div>
         </section>
 

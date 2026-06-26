@@ -1,9 +1,8 @@
 <?php
 session_start();
-include '../../config/db.php';
-
+require_once __DIR__ . '/../../config/db.php';
 if (!isset($_SESSION['admin'])) {
-    header("Location: ../login.php");
+    header("Location: /StandComputer/connexion");
     exit();
 }
 
@@ -12,7 +11,8 @@ if (isset($_POST['submit'])) {
     $title = $_POST['title'];
     $category = $_POST['category'];
     $description = $_POST['description'];
-    $uploadDir="../uploads/realisations/";
+    $uploadDir = __DIR__ . '/../uploads/realisations/';
+    $uploadDir1 = __DIR__ . '/../uploads/realisations/videos/';
     if (!is_dir ($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
@@ -51,24 +51,26 @@ if (isset($_POST['submit'])) {
 
                 move_uploaded_file(
                     $_FILES['videos']['tmp_name'][$key],
-                    $uploadDir . $filename
+                    $uploadDir1 . $filename
                 );
 
-                $videoStmt = $pdo->prepare("INSERT INTO realisation_video(realisation_id, video_path)VALUES (?, ?)");
+                $videoStmt = $pdo->prepare("INSERT INTO realisation_videos(realisation_id, video_path)VALUES (?, ?)");
                 $videoStmt->execute([$realisationId,$filename]);
             }
         }
     }
 
 
-    header("Location: manage.php");
+    header("Location: /StandComputer/gerer-les-realisations");
     exit();
 }
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Ajouter une realisation </h1>
+<br>
+<br>
 
 <form method="POST" enctype="multipart/form-data">
 
@@ -83,3 +85,9 @@ if (isset($_POST['submit'])) {
     <button type="submit" name="submit">Ajouter</button>
 
 </form>
+<br>
+<br>
+
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
+

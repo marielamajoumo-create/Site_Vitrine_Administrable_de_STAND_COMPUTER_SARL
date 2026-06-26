@@ -1,9 +1,9 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
-    header("Location: ../login.php");
+    header("Location: /StandComputer/connexion");
     exit();
 }
 
@@ -19,8 +19,9 @@ if (isset($_POST['submit'])) {
     $image = $_FILES['image']['name'];
     $tmp = $_FILES['image']['tmp_name'];
     $duration = $_POST['duration'];
+    $uploadDir = __DIR__ . '/../uploads/formations/';
 
-    move_uploaded_file($tmp, "../uploads/formations/" . $image);
+    move_uploaded_file($tmp, $uploadDir. $image);
 
     $stmt = $pdo->prepare("
         INSERT INTO formations(niveau,title, intitule, description, image, duration, nombrePersonne, natureDiplome)
@@ -29,13 +30,15 @@ if (isset($_POST['submit'])) {
 
     $stmt->execute([ $niveau, $title,$intitule, $description, $image, $duration, $nombrePersonne, $natureDiplome]);
 
-    header("Location: ../formations/manage.php");
+    header("Location: /StandComputer/gerer-les-formations");
 }
 ?>
 
-<link rel="stylesheet" href="../../assets/css/admin.css">
+<link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Ajouter une Formation</h1>
+<br/>
+<br/>
 
 <form method="POST" enctype="multipart/form-data">
 
@@ -52,3 +55,7 @@ if (isset($_POST['submit'])) {
     <button type="submit" name="submit">Ajouter</button>
 
 </form>
+<br/>
+<br/>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>

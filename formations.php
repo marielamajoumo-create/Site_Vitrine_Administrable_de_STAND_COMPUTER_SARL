@@ -11,7 +11,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
   <title>Formations – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/shared.css" />
+<link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); }
 
@@ -149,7 +149,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Formations</span>
       </div>
@@ -212,7 +212,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
             </div>
             <div class="formation-price">
               <div class="price-amount">Sur devis <small>/personne</small></div>
-              <a href="contact.php" class="btn btn-primary" style="padding:8px 16px;font-size:.8rem;">S'inscrire</a>
+              <a href="/StandComputer/contact" class="btn btn-primary" style="padding:8px 16px;font-size:.8rem;">S'inscrire</a>
             </div>
           </div>
         </div>
@@ -259,7 +259,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
         <h2>Formation pour votre équipe en entreprise ?</h2>
         <p>Nous proposons des formations sur-mesure directement dans vos locaux.</p>
       </div>
-      <a href="contact.php" class="btn btn-primary">
+      <a href="/StandComputer/contact" class="btn btn-primary">
         Nous contacter <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
     </div>
@@ -267,7 +267,7 @@ $formations = $pdo->query("SELECT * FROM formations ")->fetchAll(PDO::FETCH_ASSO
 
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>initComponents('formations');</script>
 </body>
 </html>

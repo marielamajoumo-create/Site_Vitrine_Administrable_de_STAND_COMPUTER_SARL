@@ -1,10 +1,19 @@
 <?php
 include 'config/db.php';
 
+function slugify($text){
+    $text= iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+    $text=strtolower(trim($text));
+    $text=preg_replace('/[^a-z0-9]+/', '-',$text); // remplace les espaces et caracteres preciaux par -
+    return trim($text,'-');
+}
 $services = $pdo->query("SELECT * FROM services LIMIT 6")->fetchAll(PDO::FETCH_ASSOC);
 $formations = $pdo->query("SELECT * FROM formations LIMIT 4")->fetchAll(PDO::FETCH_ASSOC);
 $realisations = $pdo->query("SELECT * FROM realisations ORDER BY created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
 $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+foreach ($realisations as &$r) {
+    $r['slug']=slugify($r['title']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +24,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <title>Réalisations – Stand Computer SARL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
   <style>
     body { padding-top: var(--nav-h); }
 
@@ -140,7 +149,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <section class="page-hero">
     <div class="container page-hero-inner">
       <div class="breadcrumb">
-        <a href="index.php">Accueil</a>
+        <a href="/StandComputer/">Accueil</a>
         <span class="sep">›</span>
         <span class="current">Réalisations</span>
       </div>
@@ -170,7 +179,12 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <div class="project-item fade-in" data-cat="<?php echo strtolower($realisation['category']); ?>">
           <div class="project-thumb">
             <img src="admin/uploads/realisations/<?php echo $realisation['thumbnail']; ?>" alt="<?php echo htmlspecialchars($realisation['title']); ?>" />
-            <div class="project-overlay"><span class="overlay-btn"><span class="material-icons-round" style="font-size:16px"><a href="realisation_details.php?id=<?php echo $realisation['id']; ?>">visibility</span>Voir</span></a></div>
+            <div class="project-overlay">
+              <span class="overlay-btn"><span class="material-icons-round" style="font-size:16px">
+                <a href="/StandComputer/details-des-realisations/<?php echo $realisation['id']; ?>">
+                  visibility
+
+                </span>Voir</span></a></div>
           </div>
           <div class="project-body">
             <h3><?php echo htmlspecialchars($realisation['title']); ?></h3>
@@ -234,7 +248,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <h2>Votre projet sera notre prochaine réalisation</h2>
         <p>Parlez-nous de votre idée, nous vous proposerons la meilleure approche.</p>
       </div>
-      <a href="contact.php" class="btn btn-primary">
+      <a href="/StandComputer/contact" class="btn btn-primary">
         Démarrer mon projet <span class="material-icons-round" style="font-size:18px">arrow_forward</span>
       </a>
     </div>
@@ -242,7 +256,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
 
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>
     initComponents('realisations');
     // Filter logic

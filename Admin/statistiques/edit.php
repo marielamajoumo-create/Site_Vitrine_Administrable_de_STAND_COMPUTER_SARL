@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['admin'])) {
     header("Location: ../login.php");
@@ -32,6 +32,8 @@ $stats = $pdo->query("SELECT * FROM statistiques WHERE id=1")->fetch(PDO::FETCH_
 <link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Modifier les Statistiques</h1>
+<br>
+<br>
 
 <form method="POST">
 
@@ -50,4 +52,9 @@ $stats = $pdo->query("SELECT * FROM statistiques WHERE id=1")->fetch(PDO::FETCH_
     <button type="submit" name="update">Mettre à jour</button>
 
 </form>
+
+<br>
+<br>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
 

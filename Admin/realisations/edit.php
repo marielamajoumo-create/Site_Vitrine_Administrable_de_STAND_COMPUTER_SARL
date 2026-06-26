@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $id = $_GET['id'];
 
@@ -14,7 +14,7 @@ if (isset($_POST['update'])) {
     $description = $_POST['description'];
 
     $thumbnail = $real['thumbnail']; // garder l’ancien par défaut
-    $uploadDir = "../uploads/realisations/";
+    $uploadDir = __DIR__ . '/../uploads/realisations/';
 
     // Vérifier si un nouveau thumbnail est uploadé
     if (!empty($_FILES['thumbnail']['name'])) {
@@ -35,13 +35,14 @@ if (isset($_POST['update'])) {
         WHERE id=?
     ")->execute([$title, $category, $description, $thumbnail, $id]);
 
-    header("Location: manage.php");
+    header("Location: /StandComputer/gerer-les-realisations");
     exit();
 }
 ?>
-<link rel="stylesheet" href="../../assets/css/admin.css">
-
+<link rel="stylesheet" href="/StandComputer/style-admin">
 <h1>Modifier cette  realisation</h1>
+<br>
+<br>
 
 
 <form method="POST" enctype="multipart/form-data">
@@ -55,8 +56,20 @@ if (isset($_POST['update'])) {
     <textarea name="description"><?php echo htmlspecialchars($real['description']); ?></textarea>
 
     <label>Image principale :</label>
-    <img src="../uploads/realisations/<?php echo $real['thumbnail']; ?>" width="150"><br>
+    <img src="/StandComputer/uploads/realisations/<?php echo $real['thumbnail']; ?>" width="150"><br>
     <input type="file" name="thumbnail">
 
     <button type="submit" name="update">Mettre à jour</button>
 </form>
+<br>
+<br>
+<a href="/StandComputer/gerer-les-realisations" class="back">Retour au tableau de gestion 
+            </a>
+            <br/>
+<br/>
+<br>
+            <br>
+<a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
+            </a>
+
+

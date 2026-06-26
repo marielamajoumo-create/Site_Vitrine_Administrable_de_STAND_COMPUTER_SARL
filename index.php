@@ -14,25 +14,25 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <link rel="manifest" href="/StandComputer/manifest.json">
+  <link rel="manifest" href="/StandComputer/manifest">
 
-<link rel="icon" type="image/jpeg" sizes="32x32"
-      href="/StandComputer/assets/icons/icon-192.jpeg">
+<link rel="icon" type="image/png" sizes="32x32"
+ href="/StandComputer/assets/icons/icon-192.png">
 
 <link rel="apple-touch-icon"
-      href="/StandComputer/assets/icons/icon-192.jpeg">
+      href="/StandComputer/assets/icons/icon-192.png">
 
 
 <meta name="theme-color" content="#0a1628">
 
-<link rel="apple-touch-icon" href="/StandComputer/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/StandComputer/assets/icons/icon-192.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stand Computer SARL – Votre partenaire en solutions numériques</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/shared.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="/StandComputer/shared" />
+  <link rel="stylesheet" href="/StandComputer/style" />
   <style> 
 
 /* ─── Catalogue ── */
@@ -43,6 +43,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 28px;
+      margin-bottom: 40px
     }
     .formation-card {
       background: var(--surface);
@@ -262,6 +263,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
 
         <div class="formation-card fade-in">
           <div class="formation-thumb">
+            
             <img src="admin/uploads/formations/<?php echo $formation['image']; ?>" alt="<?php echo htmlspecialchars($formation['title']); ?>" />
             <span class="formation-level level-debutant"><?php echo htmlspecialchars($formation['niveau']);?></span>
           </div>
@@ -317,7 +319,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
         <?php foreach($realisations as $realisation): ?>
 
         <div class="project-card fade-in">
-          <div class="project-img"><a href="<?= $base ?>details-des-realisations?id=<?php echo $realisation['id']; ?>">
+          <div class="project-img"><a href="<?= $base ?>details-des-realisations/<?php echo $realisation['id']; ?>">
                 <img src="admin/uploads/realisations/<?php echo $realisation['thumbnail']; ?>" alt="<?php echo htmlspecialchars($realisation['title']); ?>" />
             </a>
           </div>
@@ -356,7 +358,7 @@ $stats = $pdo->query("SELECT * FROM statistiques LIMIT 1")->fetch(PDO::FETCH_ASS
   <div id="footer-placeholder"></div>
   <div id="fab-placeholder"></div>
 
-  <script src="components.js"></script>
+  <script src="/StandComputer/components"></script>
   <script>
     initComponents('accueil');
     //initComponents('services');

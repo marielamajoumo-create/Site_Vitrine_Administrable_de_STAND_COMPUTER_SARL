@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../../config/db.php';
-
     $id = $_GET['id'] ?? null;
     $statut = $_GET['statut'] ?? null;
 
@@ -10,6 +9,6 @@ if ($id && $statut) {
     $stmt->execute([':statut' => $statut, ':id' => $id]);
 }
 
-header("Location: manage.php");
+header("Location: /StandComputer/gerer-les-formulaires-de-contact");
 exit;
 ?>

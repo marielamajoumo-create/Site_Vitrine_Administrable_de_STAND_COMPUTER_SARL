@@ -9,6 +9,6 @@ if ($id) {
     $stmt->execute([':id' => $id]);
 }
 
-header("Location: manage.php");
+header("Location: /StandComputer/gerer-les-formulaires-de-contact");
 exit;
 ?>

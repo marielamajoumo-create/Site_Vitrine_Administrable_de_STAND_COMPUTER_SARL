@@ -1,36 +1,98 @@
 <?php
-     //Connexion PDO centralisée
- require_once __DIR__ . '/config/db.php'; 
 
- // Toujours renvoyer du JSON
- header('Content-Type: application/json');
+require_once __DIR__ . '/config/db.php';
+
+header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     try {
-        // Préparer la requête
+
+        /*
+        |--------------------------------------------------------------------------
+        | DONNEES
+        |--------------------------------------------------------------------------
+        */
+
+        $nom = htmlspecialchars($_POST['nom']);
+        $email = htmlspecialchars($_POST['email']);
+        $telephone = htmlspecialchars($_POST['telephone']);
+        $service = htmlspecialchars($_POST['service']);
+        $sujet = htmlspecialchars($_POST['sujet']);
+        $message = htmlspecialchars($_POST['message']);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENREGISTREMENT EN BASE
+        |--------------------------------------------------------------------------
+        */
+
         $stmt = $pdo->prepare("
-            INSERT INTO messages 
-            (nom, email, telephone, serviceC, sujet, messageR, date_creation, statut) 
-            VALUES (:nom, :email, :telephone, :serviceC, :sujet, :messageR, NOW(), 'non-lu')
+            INSERT INTO messages
+            (nom, email, telephone, serviceC, sujet, messageR, date_creation, statut)
+            VALUES
+            (:nom, :email, :telephone, :serviceC, :sujet, :messageR, NOW(), 'non-lu')
         ");
 
-        // Liaison des paramètres
-        $stmt->bindParam(':nom', $_POST['nom']);
-        $stmt->bindParam(':email', $_POST['email']);
-        $stmt->bindParam(':telephone', $_POST['telephone']);
-        $stmt->bindParam(':serviceC', $_POST['service']);
-        $stmt->bindParam(':sujet', $_POST['sujet']);
-        $stmt->bindParam(':messageR', $_POST['message']);
+        $stmt->execute([
+            ':nom' => $nom,
+            ':email' => $email,
+            ':telephone' => $telephone,
+            ':serviceC' => $service,
+            ':sujet' => $sujet,
+            ':messageR' => $message
+        ]);
 
-        // Exécution
-        if ($stmt->execute()) {
-            echo json_encode(["status" => "success", "message" => "Message enregistré avec succès ✅"]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "Erreur lors de l’enregistrement ❌"]);
-        }
+        /*
+        |--------------------------------------------------------------------------
+        | RECUPERATION NUMERO WHATSAPP
+        |--------------------------------------------------------------------------
+        */
+
+        $req = $pdo->query("SELECT whatsapp FROM contacts LIMIT 1");
+
+        $data = $req->fetch();
+
+        $numeroWhatsapp = $data['whatsapp'];
+
+        /*
+        |--------------------------------------------------------------------------
+        | MESSAGE WHATSAPP
+        |--------------------------------------------------------------------------
+        */
+
+        $texte = "Bonjour,\n\n";
+        $texte .= "Nom : $nom \n";
+        $texte .= "Email : $email \n";
+        $texte .= "Téléphone : $telephone \n";
+        $texte .= "Service : $service \n";
+        $texte .= "Sujet : $sujet \n";
+        $texte .= "Message : $message";
+
+        $texteEncode = urlencode($texte);
+
+        $whatsappUrl = "https://wa.me/$numeroWhatsapp?text=$texteEncode";
+
+        /*
+        |--------------------------------------------------------------------------
+        | REPONSE JSON
+        |--------------------------------------------------------------------------
+        */
+
+        echo json_encode([
+            "status" => "success",
+            "message" => "Message envoyé avec succès ✅",
+            "redirect" => $whatsappUrl
+        ]);
 
     } catch (PDOException $e) {
-        echo json_encode(["status" => "error", "message" => "Erreur PDO ❌ : " . $e->getMessage()]);
+
+        echo json_encode([
+            "status" => "error",
+            "message" => "Erreur : " . $e->getMessage()
+        ]);
+
     }
+
 }
-?>  
+?>

@@ -1,5 +1,5 @@
 <?php
-include '../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // Récupérer tous les messages de contact
 $query = "SELECT * FROM messages_contact ORDER BY date_creation DESC";
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             ':statut' => $_POST['statut'],
             ':id' => $_POST['id']
         ]);
-        header('Location: messages.php');
+        header('Location: /StandComputer/messages');
         exit();
     }
 }
@@ -157,5 +157,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             </div>
         <?php endif; ?>
     </div>
+
+   <br/>
+<br/>
+<a href="/StandComputer/gerer-les-articles" class="back">Retour au tableau de gestion 
+            </a>
+            <br/>
+<br/>
+<a href="/StandComputer/gerer-les-formulaires-de-contact" class="back">Retour au tableau de gestion 
+            </a>
+            <br/>
+            <br>
+            <br>
+<br/>
+<a href="/StandComputer/tableau-de-bord" class="back">
+                Retour au tableau de bord 
+            </a> 
 </body>
 </html>

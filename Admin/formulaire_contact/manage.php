@@ -10,6 +10,8 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <link rel="stylesheet" href="/StandComputer/style-admin">
 
 <h1>Messages de contact</h1>
+<br>
+<br>
 <table class="table">
   <thead>
     <tr>
@@ -34,10 +36,10 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <td><?= $msg['date_creation'] ?></td>
         <td><?= $msg['statut'] ?></td>
         <td>
-          <a href="message_view.php?id=<?= $msg['id'] ?>" class ="btn btn-edit">Lire</a> |
-          <a href="message_update.php?id=<?= $msg['id'] ?> &statut=lu" class ="btn btn-add" >Marquer lu</a> |
-          <a href="message_update.php?id=<?= $msg['id'] ?> &statut=repondu" class ="btn btn-add">Marquer repondu</a> |
-          <a href="message_delete.php?id=<?= $msg['id'] ?>" class="btn btn-delete"
+          <a href="/StandComputer/lire?id=<?= $msg['id'] ?>" class ="btn btn-edit">Lire</a> |
+          <a href="/StandComputer/lu-repondu?id=<?= $msg['id'] ?> &statut=lu" class ="btn btn-add" >Marquer lu</a> |
+          <a href="/StandComputer/lu-repondu?id=<?= $msg['id'] ?> &statut=repondu" class ="btn btn-add">Marquer repondu</a> |
+          <a href="/StandComputer/supprimer-message?id=<?= $msg['id'] ?>" class="btn btn-delete"
                onclick="return confirm('Supprimer ce message ?');">
                Supprimer
             </a>
@@ -46,6 +48,8 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endforeach; ?>
   </tbody>
 </table>
+<br>
+<br>
 <a href="/StandComputer/tableau-de-bord" class="back">Retour au tableau de bord 
             </a>
 

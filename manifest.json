@@ -1,21 +1,27 @@
 {
   "name": "Stand Computer SARL",
   "short_name": "StandComputer",
+  "description": "Votre partenaire en solutions numériques",
+  "lang": "fr",
   "start_url": "/StandComputer/",
+  "scope": "/StandComputer/",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#0a1628",
   "orientation": "portrait",
+
   "icons": [
     {
-      "src": "/StandComputer/assets/icons/icon-192.jpeg",
+      "src": "/StandComputer/assets/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/StandComputer/assets/icons/icon-512.jpeg",
+      "src": "/StandComputer/assets/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
